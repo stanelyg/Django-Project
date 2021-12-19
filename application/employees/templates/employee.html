@@ -1,0 +1,82 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="pd-50 pd-sm-60 bg-white wd-xl-70p" style="margin: 0 auto;">
+        <h4 class="text-center" style="font-weight: bolder;">Employee Form</h4>
+        &nbsp;
+        <div class="row row-xs align-items-center mg-b-20">
+                <div class="col-md-4">
+                    <label class="form-label mg-b-0">Employee Names</label>
+                </div><!-- col -->
+                <div class="col-md-8 mg-t-5 mg-md-t-0">
+                    <input type="text" class="form-control" placeholder="Enter Employee Names">
+                </div><!-- col -->
+        </div><!-- row -->
+        <div class="row row-xs align-items-center mg-b-20">
+                <div class="col-md-2">
+                    <label class="form-label mg-b-0">ID No</label>
+                </div><!-- col -->
+                <div class="col-md-4 mg-t-5 mg-md-t-0">
+                    <input type="text" class="form-control" placeholder="Enter National ID No.">
+                </div><!-- col -->
+
+                <div class="col-md-2">
+                    <label class="form-label mg-b-0">PIN No</label>
+                </div><!-- col -->
+                <div class="col-md-4 mg-t-5 mg-md-t-0">
+                    <input type="text" class="form-control" placeholder="Enter National ID No.">
+                </div><!-- col -->
+
+        </div><!-- row -->
+        <div class="row row-xs align-items-center mg-b-20">
+            <div class="col-md-2">
+                <label class="form-label mg-b-0">NSSF  No</label>
+            </div><!-- col -->
+            <div class="col-md-4 mg-t-5 mg-md-t-0">
+                <input type="text" class="form-control" placeholder="Enter Nssf No.">
+            </div><!-- col -->
+
+            <div class="col-md-2">
+                <label class="form-label mg-b-0">NHIF No</label>
+            </div><!-- col -->
+            <div class="col-md-4 mg-t-5 mg-md-t-0">
+                <input type="text" class="form-control" placeholder="Enter Nhif  No.">
+            </div><!-- col -->
+
+        </div><!-- row -->
+        <div class="row row-xs align-items-center mg-b-20">
+            <div class="col-md-2">
+                <label class="form-label mg-b-0">Date Of Joining</label>
+            </div><!-- col -->
+            <div class="col-md-4 mg-t-5 mg-md-t-0">
+                <input type="text" class="form-control" placeholder="Enter Nssf No.">
+            </div><!-- col -->
+
+            <div class="col-md-2">
+                <label class="form-label mg-b-0">Date Of Leaving</label>
+            </div><!-- col -->
+            <div class="col-md-4 mg-t-5 mg-md-t-0">
+                <input type="text" class="form-control" placeholder="Enter Nhif  No.">
+            </div><!-- col -->
+        </div><!-- row -->
+
+
+
+
+
+
+        <div class="row row-xs align-items-center mg-b-20">
+        <div class="col-md-4">
+            <label class="form-label mg-b-0">Email</label>
+        </div><!-- col -->
+        <div class="col-md-8 mg-t-5 mg-md-t-0">
+            <input type="email" class="form-control" placeholder="Enter your email">
+        </div><!-- col -->
+        </div><!-- row -->
+
+        <button class="btn btn-az-primary pd-x-30 mg-r-5">Register</button>
+        <button class="btn btn-dark pd-x-30">Cancel</button>
+    </div>
+
+{%endblock%}

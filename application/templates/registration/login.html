@@ -1,0 +1,53 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>KM Payroll</title>
+
+    <!-- vendor css -->
+
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/azia.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/fontawesome-free/css/all.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/ionicons/css/ionicons.min.css'%}">
+    <link rel="stylesheet" type="text/css"   href="{% static 'lib/typicons.font/typicons.css'%}">
+  </head>
+  <body class="az-body">
+
+    <div class="az-signin-wrapper">
+      <div class="az-card-signin">
+        <!-- <h1 class="az-logo">KM<span>P</span>ayroll</h1> -->
+        <div class="az-signin-header">
+          <h1 class="text-center">KM<span>P</span>ayroll</h1>
+          <h2>Welcome back!</h2>
+          <h4>Please sign in to continue</h4>
+          <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+              <label>User Name</label>
+              <input type="text" class="form-control" id="id_username" name="username" placeholder="Enter your username" value="">
+            </div><!-- form-group -->
+            <div class="form-group">
+              <label>Password</label>
+              <input type="password" class="form-control" id="id_password" name="password" placeholder="Enter your password">
+            </div><!-- form-group -->
+            <button class="btn btn-az-primary btn-block">Sign In</button>
+          </form>
+        </div><!-- az-signin-header -->
+      </div><!-- az-card-signin -->
+    </div><!-- az-signin-wrapper -->
+
+    <script src="{% static 'lib/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'lib/ionicons/ionicons.js'%}"></script>
+    <script src="{% static 'lib/jquery.flot/jquery.flot.js'%}"></script>
+    <script src="{% static 'lib/jquery.flot/jquery.flot.resize.js'%}"></script>
+    <script src="{% static 'lib/jqvmap/jquery.vmap.min.js'%}"></script>
+    <script src="{% static 'lib/jqvmap/maps/jquery.vmap.world.js'%}"></script>
+    <script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/azia.js' %}"></script>
+  </body>
+</html>

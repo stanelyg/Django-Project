@@ -1,0 +1,217 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css"  href="{% static 'css/azia.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/fontawesome-free/css/all.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/ionicons/css/ionicons.min.css'%}">
+    <link rel="stylesheet" type="text/css"   href="{% static 'lib/typicons.font/typicons.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/morris.js/morris.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/datatables.net-dt/css/jquery.dataTables.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/select2/css/select2.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/lightslider/css/lightslider.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/line-awesome/css/line-awesome.min.css'%}">
+
+    <script type="text/javascript" src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/ionicons/ionicons.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables.net-dt/js/dataTables.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables.net-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/select2/js/select2.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/jquery.maskedinput/jquery.maskedinput.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/jquery-steps/jquery.steps.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'lib/parsleyjs/parsley.min.js' %}"></script>   
+     <title>KIM PAYROLL</title>
+</head>
+<body  class="az-body az-body-sidebar az-body-dashboard-nine">
+    <!-- az-sidebar -->
+    <div class="az-sidebar az-sidebar-sticky az-sidebar-indigo-dark">
+        <div class="az-sidebar-loggedin">
+          <div class="az-img-user online"><img src="https://via.placeholder.com/500x500" alt=""></div>
+          <div class="media-body">
+            <h6>KM Payroll</h6>      
+            <span>Premium Member</span>   
+          </div><!-- media-body -->
+        </div><!-- az-sidebar-loggedin -->
+        <div class="az-sidebar-body">
+          <ul class="nav">
+            <li class="nav-item active show">
+              <a href="index.html" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>Employees</a>
+              <nav class="nav-sub">
+                <a href="/employees/employee-create" class="nav-sub-link">Employee Form</a>            
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>Attendance</a>
+              <nav class="nav-sub">
+                <a href="app-mail.html" class="nav-sub-link">Mailbox</a>
+                <a href="app-chat.html" class="nav-sub-link">Chat</a>
+                <a href="app-calendar.html" class="nav-sub-link">Calendar</a>
+                <a href="app-contacts.html" class="nav-sub-link">Contacts</a>
+                <a href="page-profile.html" class="nav-sub-link">Profile</a>
+                <a href="page-invoice.html" class="nav-sub-link">Invoice</a>
+                <a href="page-signin.html" class="nav-sub-link">Sign In</a>
+                <a href="page-signup.html" class="nav-sub-link">Sign Up</a>
+                <a href="page-404.html" class="nav-sub-link">Page 404</a>
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-book"></i>Salary Reports</a>
+              <nav class="nav-sub">
+                <a href="elem-accordion.html" class="nav-sub-link">Accordion</a>
+                <a href="elem-alerts.html" class="nav-sub-link">Alerts</a>
+                <a href="elem-buttons.html" class="nav-sub-link">Buttons</a>
+                <a href="elem-cards.html" class="nav-sub-link">Cards</a>
+                <a href="elem-icons.html" class="nav-sub-link">Icons</a>
+                <a href="elem-modals.html" class="nav-sub-link">Modals</a>
+                <a href="elem-navigation.html" class="nav-sub-link">Navigation</a>
+                <a href="elem-pagination.html" class="nav-sub-link">Pagination</a>
+                <a href="elem-tooltip.html" class="nav-sub-link">Tooltip</a>
+                <a href="elem-popover.html" class="nav-sub-link">Popover</a>
+                <a href="elem-progress.html" class="nav-sub-link">Progress</a>
+              </nav>
+            </li><!-- nav-item -->
+            <li class="nav-item">
+              <a href="" class="nav-link with-sub"><i class="typcn typcn-edit"></i>Statutories Report</a>
+              <nav class="nav-sub">
+                <a href="form-elements.html" class="nav-sub-link">Form Elements</a>
+                <a href="form-layouts.html" class="nav-sub-link">Form Layouts</a>
+                <a href="form-validation.html" class="nav-sub-link">Form Validation</a>
+                <a href="form-wizards.html" class="nav-sub-link">Form Wizards</a>
+                <a href="form-editor.html" class="nav-sub-link">WYSIWYG Editor</a>
+              </nav>
+            </li><!-- nav-item -->
+          
+          </ul><!-- nav -->
+        </div><!-- az-sidebar-body -->
+      </div><!-- az-sidebar -->
+      <div class="az-content az-content-dashboard-nine">
+        <div class="az-header az-header-dashboard-nine">
+          <div class="container-fluid">
+            <div class="az-header-left">
+              <a href="" id="azSidebarToggle" class="az-header-menu-icon"><span></span></a>
+            </div><!-- az-header-left -->
+            <div class="az-header-center">
+              <input type="search" class="form-control" placeholder="Search for anything...">
+              <button class="btn"><i class="fas fa-search"></i></button>
+            </div>
+            <div class="az-header-right"> 
+              <div class="dropdown az-profile-menu">
+                <a href="" class="az-img-user"><img src="https://via.placeholder.com/500x500" alt=""></a>
+                <div class="dropdown-menu">
+                  <div class="az-dropdown-header d-sm-none">
+                    <a href="" class="az-header-arrow"><i class="icon ion-md-arrow-back"></i></a>
+                  </div>
+                  <div class="az-header-profile">
+                    <div class="az-img-user">
+                      <img src="https://via.placeholder.com/500x500" alt="">
+                    </div><!-- az-img-user -->
+                    <h6>KM Payroll</h6>
+                    {% if user.is_authenticated %}
+                    <span>{{ user.username }}</span>
+                    {% endif %}
+                  </div><!-- az-header-profile -->
+  
+                  <a href="" class="dropdown-item"><i class="typcn typcn-user-outline"></i> My Profile</a>
+                  <a href="" class="dropdown-item"><i class="typcn typcn-edit"></i> Edit Profile</a>
+                  <a href="" class="dropdown-item"><i class="typcn typcn-time"></i> Activity Logs</a>
+                  <a href="/admin" target="_blank" class="dropdown-item"><i class="typcn typcn-cog-outline"></i> Admin Settings</a>
+                  <a href="{% url 'logout' %}" class="dropdown-item"><i class="typcn typcn-power-outline"></i> Sign Out</a>
+                </div><!-- dropdown-menu -->
+              </div>
+            </div><!-- az-header-right -->
+          </div><!-- container -->
+        </div><!-- az-header -->
+        <div class="az-content-header">
+          <div class="az-content-header-top">
+            <div>
+              <h2 class="az-content-title mg-b-5 mg-b-lg-8">Hi, welcome back!</h2>             
+            </div>
+            <div class="az-dashboard-date">
+              <div class="date">
+                <div>{% now "jS" %}</div>
+                <div>
+                  <span>{% now "M Y" %}</span>
+                  <span>{% now "D" %}</span>
+                </div>
+              </div><!-- az-dashboard-date -->          
+            </div><!-- az-dashboard-date -->
+          </div><!-- az-content-body-title -->         
+        </div><!-- az-content-header -->
+        <div class="az-content-body">
+            {% block content %}
+
+
+
+
+
+            {% endblock %}
+        </div>
+    </div>
+
+    <script src="{% static 'lib/jquery/jquery.min.js'%}"></script>
+    <script src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js'%}"></script>
+    <script src="{% static 'lib/ionicons/ionicons.js'%}"></script>
+    <script src="{% static 'lib/jquery.flot/jquery.flot.js'%}"></script>
+    <script src="{% static 'lib/jquery.flot/jquery.flot.resize.js'%}"></script>
+    <script src="{% static 'lib/jqvmap/jquery.vmap.min.js'%}"></script>
+    <script src="{% static 'lib/jqvmap/maps/jquery.vmap.world.js'%}"></script>
+    <script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/azia.js' %}"></script>
+
+    <script>
+      $(function(){
+        $('.az-sidebar .with-sub').on('click', function(e){
+          e.preventDefault();
+          $(this).parent().toggleClass('show');
+          $(this).parent().siblings().removeClass('show');
+        })
+
+        $(document).on('click touchstart', function(e){
+          e.stopPropagation();
+
+          // closing of sidebar menu when clicking outside of it
+          if(!$(e.target).closest('.az-header-menu-icon').length) {
+            var sidebarTarg = $(e.target).closest('.az-sidebar').length;
+            if(!sidebarTarg) {
+              $('body').removeClass('az-sidebar-show');
+            }
+          }
+        });
+
+
+        $('#azSidebarToggle').on('click', function(e){
+          e.preventDefault();
+
+          if(window.matchMedia('(min-width: 992px)').matches) {
+            $('body').toggleClass('az-sidebar-hide');
+          } else {
+            $('body').toggleClass('az-sidebar-show');
+          }
+        });
+
+        new PerfectScrollbar('.az-sidebar-body', {
+          suppressScrollX: true
+        });
+
+
+
+
+
+
+
+
+
+
+      });
+
+
+
+    </script>
+</body>
+</html>
