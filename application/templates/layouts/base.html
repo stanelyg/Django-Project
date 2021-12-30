@@ -6,7 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css"  href="{% static 'css/azia.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.structure.min.css' %}">
+     <link rel="stylesheet" type="text/css" href="{% static 'css/jquery-ui.theme.min.css' %}">
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/fontawesome-free/css/all.min.css'%}">
+    <link rel="stylesheet" type="text/css"  href="{% static 'lib/bootstrap/css/bootstrap.min.css'%}">
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/ionicons/css/ionicons.min.css'%}">
     <link rel="stylesheet" type="text/css"   href="{% static 'lib/typicons.font/typicons.css'%}">
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/morris.js/morris.css'%}">
@@ -15,8 +19,12 @@
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/select2/css/select2.min.css'%}">
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/lightslider/css/lightslider.min.css'%}">
     <link rel="stylesheet" type="text/css"  href="{% static 'lib/line-awesome/css/line-awesome.min.css'%}">
+  
+
+    
 
     <script type="text/javascript" src="{% static 'lib/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+   
     <script type="text/javascript" src="{% static 'lib/ionicons/ionicons.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/datatables.net/js/jquery.dataTables.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/datatables.net-dt/js/dataTables.dataTables.min.js' %}"></script>
@@ -25,12 +33,16 @@
     <script type="text/javascript" src="{% static 'lib/select2/js/select2.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/jquery.maskedinput/jquery.maskedinput.js' %}"></script>
     <script type="text/javascript" src="{% static 'lib/jquery-steps/jquery.steps.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'lib/parsleyjs/parsley.min.js' %}"></script>   
+    <script type="text/javascript" src="{% static 'lib/parsleyjs/parsley.min.js' %}"></script> 
+    <script type="text/javascript" src="{% static 'js/azia.js' %}"></script>
+      <script src="{% static 'lib/jquery/jquery.min.js'%}"></script>
+    
+
      <title>KIM PAYROLL</title>
 </head>
 <body  class="az-body az-body-sidebar az-body-dashboard-nine">
     <!-- az-sidebar -->
-    <div class="az-sidebar az-sidebar-sticky az-sidebar-indigo-dark">
+    <div class="az-sidebar az-sidebar-sticky bg-white-6">
         <div class="az-sidebar-loggedin">
           <div class="az-img-user online"><img src="https://via.placeholder.com/500x500" alt=""></div>
           <div class="media-body">
@@ -40,7 +52,10 @@
         </div><!-- az-sidebar-loggedin -->
         <div class="az-sidebar-body">
           <ul class="nav">
-            <li class="nav-item active show">
+            <li class="nav-item">
+              <a href="/"  class="nav-link"><i class="icon ion-ios-home"></i><strong>Home</strong></a>
+            </li>
+            <li class="nav-item">
               <a href="index.html" class="nav-link with-sub"><i class="typcn typcn-clipboard"></i>Employees</a>
               <nav class="nav-sub">
                 <a href="/employees/employee-create" class="nav-sub-link">Employee Form</a>            
@@ -49,15 +64,7 @@
             <li class="nav-item">
               <a href="" class="nav-link with-sub"><i class="typcn typcn-document"></i>Attendance</a>
               <nav class="nav-sub">
-                <a href="app-mail.html" class="nav-sub-link">Mailbox</a>
-                <a href="app-chat.html" class="nav-sub-link">Chat</a>
-                <a href="app-calendar.html" class="nav-sub-link">Calendar</a>
-                <a href="app-contacts.html" class="nav-sub-link">Contacts</a>
-                <a href="page-profile.html" class="nav-sub-link">Profile</a>
-                <a href="page-invoice.html" class="nav-sub-link">Invoice</a>
-                <a href="page-signin.html" class="nav-sub-link">Sign In</a>
-                <a href="page-signup.html" class="nav-sub-link">Sign Up</a>
-                <a href="page-404.html" class="nav-sub-link">Page 404</a>
+                <a href="/attendance/attendance-create" class="nav-sub-link">Attendance Sheet</a>              
               </nav>
             </li><!-- nav-item -->
             <li class="nav-item">
@@ -97,9 +104,17 @@
               <a href="" id="azSidebarToggle" class="az-header-menu-icon"><span></span></a>
             </div><!-- az-header-left -->
             <div class="az-header-center">
-              <input type="search" class="form-control" placeholder="Search for anything...">
-              <button class="btn"><i class="fas fa-search"></i></button>
+              <h2 class="az-content-title mg-b-5 mg-b-lg-8">Hi, welcome back!</h2>               
             </div>
+            <div class="az-dashboard-date">
+              <div class="date">
+                <div>{% now "jS" %}</div>
+                <div>
+                  <span>{% now "M Y" %}</span>
+                  <span>{% now "D" %}</span>
+                </div>
+              </div><!-- az-dashboard-date -->   
+            </div>   
             <div class="az-header-right"> 
               <div class="dropdown az-profile-menu">
                 <a href="" class="az-img-user"><img src="https://via.placeholder.com/500x500" alt=""></a>
@@ -127,23 +142,8 @@
             </div><!-- az-header-right -->
           </div><!-- container -->
         </div><!-- az-header -->
-        <div class="az-content-header">
-          <div class="az-content-header-top">
-            <div>
-              <h2 class="az-content-title mg-b-5 mg-b-lg-8">Hi, welcome back!</h2>             
-            </div>
-            <div class="az-dashboard-date">
-              <div class="date">
-                <div>{% now "jS" %}</div>
-                <div>
-                  <span>{% now "M Y" %}</span>
-                  <span>{% now "D" %}</span>
-                </div>
-              </div><!-- az-dashboard-date -->          
-            </div><!-- az-dashboard-date -->
-          </div><!-- az-content-body-title -->         
-        </div><!-- az-content-header -->
         <div class="az-content-body">
+          {% include "includes/messages.html" %}
             {% block content %}
 
 
@@ -163,6 +163,8 @@
     <script src="{% static 'lib/jqvmap/maps/jquery.vmap.world.js'%}"></script>
     <script src="{% static 'lib/perfect-scrollbar/perfect-scrollbar.min.js'%}"></script>
     <script type="text/javascript" src="{% static 'js/azia.js' %}"></script>
+    <script src="{% static 'js/ jquery-3.4.1.js'%}"></script>
+    <script src="{% static 'js/jquery-ui.min.js'%}"></script>
 
     <script>
       $(function(){
@@ -171,7 +173,6 @@
           $(this).parent().toggleClass('show');
           $(this).parent().siblings().removeClass('show');
         })
-
         $(document).on('click touchstart', function(e){
           e.stopPropagation();
 
@@ -198,15 +199,6 @@
         new PerfectScrollbar('.az-sidebar-body', {
           suppressScrollX: true
         });
-
-
-
-
-
-
-
-
-
 
       });
 

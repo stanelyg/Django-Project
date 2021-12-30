@@ -18773,6 +18773,13 @@ textarea.parsley-success:focus {
   .ht-sm-100v {
     height: 100vh; } }
 
+.info{
+    background-color:#eceff2 !important;
+    color: black !important;
+}
+input:focus {
+  background-color: #fff39c;
+}
 @media (min-width: 768px) {
   .ht-md-5 {
     height: 5px; }

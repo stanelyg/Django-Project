@@ -82,3 +82,50 @@ class WorkingHour(models.Model):
       def __str__(self):
                 return self.work_hour_name
     
+    
+def navigate_model(nav_btn_data,data_model):
+     if nav_btn_data['nav-button']=='first':
+               query=data_model.objects.order_by('id').first()
+               if query:
+                    return query.id
+               else:
+                    return None
+     elif nav_btn_data['nav-button'] =='forward':
+               if nav_btn_data['id']:
+                         query=data_model.objects.filter(id__gt=nav_btn_data['id']).order_by('id').first()
+                         if query:
+                              return query.id
+                         else:
+                              query=data_model.objects.order_by('id').first()
+                              return query.id
+               else :
+                    query=data_model.objects.order_by('id').first()
+                    if query:
+                              return query.id
+                    else:
+                              return None
+     elif nav_btn_data['nav-button'] =='backward':
+          if nav_btn_data['id']:
+               query=data_model.objects.filter(id__lt=nav_btn_data['id']).order_by('id').last()
+               if query:
+                    return query.id
+               else:
+                    query=data_model.objects.order_by('id').last()
+                    return query.id
+          else:
+               query=data_model.objects.order_by('id').last()
+               if query:
+                    return query.id
+               else:
+                    return None
+     elif  nav_btn_data['nav-button']=='last':
+               query=data_model.objects.order_by('id').last()
+               if query:
+                    return query.id
+               else:
+                    return None
+
+
+def get_post_array(tup, di):
+    di = dict(tup)
+    return di

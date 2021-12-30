@@ -21,7 +21,6 @@ $(function(){
     $(this).parent().toggleClass('show');
     $(this).parent().siblings().removeClass('show');
   });
-
   // this will hide dropdown menu from open in mobile
   $('.dropdown-menu .az-header-arrow').on('click', function(e){
     e.preventDefault();
@@ -77,6 +76,23 @@ $(function(){
       }
     }
   });
-
-
+  //my function 
+  function notrequired(id)
+  {
+      $('#'+id+'').find(':input').each(function(){
+        $(this).prop('required',false)
+      })
+  }
+  
 });
+
+// $(function() {
+//   $('.nav-sub').on('nav-link with-sub', function (e) {
+//     localStorage.setItem('lastSubMenu', $(this).attr('id'));
+//   });
+
+//   var lastSubMenu = localStorage.getItem('lastSubMenu');
+//   if (lastSubMenu) {
+//     $('[id="' + lastSubMenu + '"]').collapse('show');
+//   }
+// });

@@ -1,32 +1,12 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% block content %}
-<script type="text/javascript">
-    $(document).ready(function() {
-       $("button[name='nav-button']").click(function() {
-        $('#employeeform').attr('action',"{% url 'employees:nav-employees'%}").submit();
-        });
-    });
-    $( function() {
-          $("#id_employee_no").autocomplete({
-            source:"{% url 'employees:emps-autocomplete' %}",
-            autoFocus: true,
-            select: function(event, ui) {
-                    $(event.target).val(ui.item.value);
-                    $('#employeeform').attr('action',"{% url 'employees:get_form'%}").submit();
-                    return false;
-            }
-          });
-    });
-</script> 
-
-
-<form  action="" enctype="multipart/form-data" method="POST" id="employeeform" >
+<form enctype="multipart/form-data" method="POST" id="employeeform" >
     {% csrf_token %}
     {{form.media}}
     <div class="pd-50 pd-sm-60 bg-white wd-xl-70p" style="margin: 0 auto;">
-       
         <div class="row row-sm">
+
             <div class="col-lg-4 mg-t-20 mg-lg-t-0 text-left">
                 <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="submit" class="btn btn" name="nav-button" value="first" formnovalidate>
@@ -48,7 +28,7 @@
               </div>
 
         </div>
-    </br>
+        &nbsp;
         <div class="row row-xs align-items-center mg-b-20">
                 <div class="col-md-2">
                     <label class="form-label mg-b-0">Emp No</label>
@@ -121,8 +101,11 @@
             <div class="col-md-3 mg-t-5 mg-md-t-0">
                 {{form.basic_salary}}
             </div><!-- col -->
-        </div><!-- row -->
-        <input  class="btn btn-az-primary pd-x-30 mg-r-5"  type="submit" value="Register"/>
+        </div><!-- row -->         
+        <input  class="btn btn-az-primary pd-x-30 mg-r-5"  type="submit" value="Update"/>
+        <a href="{% url 'employees:employee-create' %}"  class="btn btn-dark pd-x-30">Cancel</a>
+
+              
     </div>
 </form>
 
