@@ -38,9 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'import_export',
+    'django.contrib.humanize',
     'dbmaster.apps.DbmasterConfig',
     'employees.apps.EmployeesConfig',
-    'attendance.apps.AttendanceConfig'
+    'attendance.apps.AttendanceConfig',
+    'salaryreports.apps.SalaryreportsConfig',
     
     
 ]

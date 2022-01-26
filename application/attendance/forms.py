@@ -45,7 +45,7 @@ class  AttendanceUpdateForm(forms.ModelForm):
 class AttendanceDetailsForm(forms.ModelForm):
       class Meta:
             model = AttendanceDetail
-            fields=['employee_no','employee_name','days']
+            fields=['employee_no','employee_name','days','leaves']
       employee_no=forms.ModelChoiceField(
                   queryset = Employee.objects.all(),
                   widget=forms.TextInput(attrs={
@@ -63,5 +63,23 @@ class AttendanceDetailsForm(forms.ModelForm):
             'pattern':'(?:1[0-9]|[0-9])(?:1[0-9]|[0-9])(?:\.[0-9])?',
             'autocomplete':'off'
       }),required=False)
+      leaves=forms.DecimalField(widget=forms.TextInput(attrs={
+            'class':'text-right row-nav',
+            'onclick': 'this.select();',
+             'size':6,             
+            # 'pattern':'(?:1[0-9]|[0-9])(?:\.[0-9])?',
+            'autocomplete':'off'
+      }),required=False)
 
 AttendanceFormset=inlineformset_factory(Attendance,AttendanceDetail,extra=10,form=AttendanceDetailsForm)
+
+
+class MonthlyReportForm(forms.Form):
+      year=forms.ChoiceField(
+          choices=SalaryPeriod.get_years,
+         initial=0)
+
+      month=forms.ChoiceField(
+       choices=SalaryPeriod.get_months,
+       )
+      

@@ -91,17 +91,24 @@
             <div class="col-md-2">
                 <label class="form-label mg-b-0">Working Hours</label>
             </div><!-- col -->
-            <div class="col-md-5 mg-t-5 mg-md-t-0">
+            <div class="col-md-10 mg-t-5 mg-md-t-0">
                {{form.work_hours_code}}
-            </div><!-- col -->
-
+            </div><!-- col -->           
+        </div><!-- row -->
+        <div class="row row-xs align-items-center mg-b-20">
             <div class="col-md-2">
                 <label class="form-label mg-b-0">Basic Salary</label>
             </div><!-- col -->
             <div class="col-md-3 mg-t-5 mg-md-t-0">
                 {{form.basic_salary}}
             </div><!-- col -->
-        </div><!-- row -->         
+            <div class="col-md-3">
+                <label class="form-label mg-b-0">House Allowance Rate</label>
+            </div><!-- col -->
+            <div class="col-md-4 mg-t-5 mg-md-t-0">
+                {{form.house_allowance_rate}}
+            </div><!-- col -->
+        </div><!-- row -->
         <input  class="btn btn-az-primary pd-x-30 mg-r-5"  type="submit" value="Update"/>
         <a href="{% url 'employees:employee-create' %}"  class="btn btn-dark pd-x-30">Cancel</a>
 

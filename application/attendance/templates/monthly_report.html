@@ -1,0 +1,145 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+{% block content %}
+<script>
+function exportCSV(){
+	$(".exportTbl").tableToCSV();
+}
+function toggleClass(el, className) {
+    if (el.className.indexOf(className) >= 0) {
+        el.className = el.className.replace(className,"");
+    }
+    else {
+        el.className  += className;
+    }
+}
+function ShowHighlighted(cb){
+	if(cb.checked){
+	$("#tbody").find("tr").hide();
+	$("#tbody").find(".selected").show();
+	}
+	else{
+	$("#tbody").find("tr").show();
+	}
+}
+$(function(){
+     $('#selectall').on('change', function(){
+       $('.selectemp').prop('checked',this.checked);
+    });
+ });
+
+ $(function(){
+	$("#rd-balances").click(function() {
+		if($(this).is(':checked'))
+		{
+		 $("#detaildiv").hide(1000);
+		 $('#detaildiv').find('table').removeClass('exportTbl');
+         $("#detaildiv" ).remove();
+		 $("#bal_detail").show(1000);
+		 $('#bal_detail').find('table').addClass('exportTbl');
+		}
+		else if($(this).is(":not(:checked)"))
+		{
+		$('#detaildiv').find('table').addClass('exportTbl');
+		$("#detaildiv").show(1000);
+		$("#bal_detail").hide(1000);
+
+		$('#bal_detail').find('table').removeClass('exportTbl');
+
+		}
+
+	});
+});
+
+
+
+
+</script>
+<style>
+.selected
+{
+    background-color: #ff8;
+}
+input,select {border: 0 !important; width: 100% !important; border-radius: 0 !important; background-color: #fff;}
+</style>
+<div class="" style="width: 600px;margin: 0 auto !important;">
+    <form action="{% url 'attendance:attendance-data'%}" method="POST" id="monthly-report">
+    {% csrf_token %}
+    {{form.errors }}
+    <table id="form" class="table table-striped table-bordered table-hover table-minimal table-scroll">
+        <tr class="info">
+            <td class="text-center" colspan="6">
+                <h5>Monthly Report</h5>
+            </td>
+        </tr>      
+        <tr>
+
+            {% for field in form %}
+            <td class="text-center"><strong>{{ field.label }}:</strong> {{field}}</td>
+            {% endfor %}
+            </tr>
+        </tr>
+        <tr class="info">
+            <td class="text-left "  colspan="7">
+                <input  class="btn btn-success btn-form tr-btn pd-x-30 mg-r-5"  type="submit" value="Submit" />
+                {% if rows %}
+                <a href="{% url 'attendance:monthly-report' %}"  class="btn btn-danger btn-form">Cancel</a>
+                {%endif%}
+            </td>
+        </tr>
+        {% if rows %}
+       
+        {%endif%}
+        </table>
+
+</div>
+
+<div class="container" id="detaildiv" style="width:2550px;">
+    {% if rows %}
+    <table class="table table-bordered table-minimal exportTbl" id="data_table" >
+        <caption style="display:none;">Monthly Attendance Report-{{form.year.value}}-{{form.month.value}} </caption>
+        <thead class="">
+            <tr style="font-weight: bolder;">
+              <th class="noExport">Si</th>            
+              <th>Emp No</th>
+              <th>Emp Name</th>
+              <th>Working Days</th>
+              <th>Worked Days</th>
+              <th>Paid Leaves</th>
+              <th>Holidays</th>
+              <th>Absent Days</th>
+            </tr>
+
+        </thead>
+        <tbody id="tbody">
+            {% for key,row in rows.items %}
+            <tr onclick="toggleClass(this,'selected');">
+                <td class="noExport">{{forloop.counter}}</td>
+                <td class="text-left" style="white-space: nowrap;">{{row.employee_no}}</td>
+                <td class="text-left" style="white-space: nowrap;">{{row.employee_name}}</td>              
+                <td class="text-right" style="white-space: nowrap;">{{row.working_days}}</td>
+                <td class="text-right" style="white-space: nowrap;">{{row.worked_days}}</td>
+                <td class="text-right" style="white-space: nowrap;">{{row.leaves}}</td>
+                <td class="text-right" style="white-space: nowrap;">{{row.no_of_holidays}}</td>              
+                <td class="text-right" style="white-space: nowrap;">{{row.absent_days|floatformat:2|intcomma}}</td>                
+            </tr>
+            {%endfor%}
+        </tbody>
+        <tfoot class="info" style="font-weight: bold;">
+            <tr>
+                <td class="noExport"></td>
+                <td class="noExport"></td> 
+                <td></td>     
+                <td><strong>Totals</strong></td>           
+                <td class="text-right">{{totals.sum_worked_days|floatformat:2|intcomma}}</td>
+                <td class="text-right">{{totals.sum_paid_leaves|floatformat:2|intcomma}}</td>
+                <td class="text-right">{{totals.sum_holidays|floatformat:2|intcomma}}</td>
+                <td class="text-right">{{totals.sum_absent_days|floatformat:2|intcomma}}</td>
+            </tr>
+        </tfoot>
+    </table>
+
+    {%endif%}
+</div>
+</form>
+{% endblock %}

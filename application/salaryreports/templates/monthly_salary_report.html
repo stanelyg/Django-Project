@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+{% load static  %}
+{% load humanize %}
+{% block content %}
+
+<script>
+    function exportCSV(){
+    	$(".exportTbl").tableToCSV();
+    }
+    function toggleClass(el, className) {
+        if (el.className.indexOf(className) >= 0) {
+            el.className = el.className.replace(className,"");
+        }
+        else {
+            el.className  += className;
+        }
+    }
+    function ShowHighlighted(cb){
+        if(cb.checked){
+        $("#tbody").find("tr").hide();
+        $("#tbody").find(".selected").show();
+        }
+        else{
+        $("#tbody").find("tr").show();
+        }
+    }
+    </script>
+     <style  TYPE="text/css" scoped>
+
+        @page{
+            size:auto;
+            margin:10mm 5mm;
+        }
+        @media print {
+            .hide-on-print {display:none;}
+            input[type=text] {
+                box-shadow: none;
+                border: none;
+                line-height: initial;
+            }
+            body
+            {
+                    margin: 0px;
+            }
+    }
+
+
+    #detail-table > tbody >tr > td{
+        padding: 2px 0px 2px 4px !important;
+    }
+    .selected
+    {
+        background-color: #bbb;
+    }
+    </style>
+<div class="" style="width: 700px;padding-right: 25px;margin: 0 auto !important;">
+    <form action="" method="GET" id="monthly-report" class="deptsForm">
+    {% csrf_token %}
+    {{ form.errors }}
+    <table id="form" class="table table-striped table-bordered table-hover table-minimal table-scroll">
+        <tr class="info">
+            <td class="text-center" colspan="6">
+                <h5>Monthly Salary Report</h5>
+            </td>
+        </tr>
+        <tr>
+            {% for field in object_list.form %}
+            <td><strong>{{ field.label }}:</strong> {{field}}</td>
+            {% endfor %}
+            </tr>
+        </tr>
+        <tr class="info">
+            <td class="text-left tr-btn"  colspan="6">
+                <input  class="btn btn-success btn-form hide-on-print"  type="submit" value="Submit" />
+                {% if object_list.table %}
+                <a href="{% url 'salaryreports:monthly-salary-report' %}"  class="btn btn-danger btn-form hide-on-print">Cancel</a>
+
+            </td>
+        </tr>
+        {%endif%}
+        </table>
+    </form>
+    
+</div>
+<div class="3250px;">
+   
+
+</div>
+{% endblock %}

@@ -1,5 +1,6 @@
 from django.contrib import messages
-from datetime import datetime,timedelta
+import  datetime
+
 from django.utils.dateparse import parse_date
 from django.contrib.auth.mixins import (LoginRequiredMixin,
                                         PermissionRequiredMixin)
@@ -15,9 +16,11 @@ from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DetailView, ListView, UpdateView,View
 
 from attendance.forms import (AttendanceCreateForm, AttendanceDetailsForm,
-                              AttendanceUpdateForm,AttendanceFormset)
+                              AttendanceUpdateForm,AttendanceFormset,MonthlyReportForm)
 from attendance.models import Attendance, AttendanceDetail
-from dbmaster.models import  get_post_array, navigate_model,check_open_month
+from attendance.get_report_data import  get_monthly_report
+from dbmaster.models import  get_post_array, navigate_model,check_open_month,period_dates
+from employees.models import Employee
 
 
 class AttendanceCreateView(LoginRequiredMixin,CreateView):
@@ -155,3 +158,41 @@ def copy_attendance(request):
                 formset=AttendanceFormset(initial=data)
             return render(request,'attendance.html' ,{'form':form,'details':formset})
 
+
+
+class MonthlyReportView(LoginRequiredMixin,ListView):
+         form_class=MonthlyReportForm
+         template_name = 'monthly_report.html'      
+         def get(self, request,**kwargs):
+               form = self.form_class(initial=self.get_initial())
+               return render(request,self.template_name, {'form': form})
+         def get_initial(self):
+               initial_base={}
+               initial_base['year']=(datetime.datetime.now().year ,self.request.GET.get('year'))[self.request.GET.get('year') is not None]
+               initial_base['month']=(datetime.datetime.now().month,self.request.GET.get('month')) [self.request.GET.get('month') is not None]                    
+               return initial_base
+
+
+
+def get_report_data(request):
+    form = MonthlyReportForm()
+    template_name = 'monthly_report.html'
+    context = {"form": form}
+    if request.POST:
+        initial_base={}
+        initial_base['year']=request.POST.get('year')
+        initial_base['month']=request.POST.get('month')        
+        form =MonthlyReportForm(initial=initial_base)
+        year = request.POST.get('year')
+        month = request.POST.get('month')
+        period=period_dates(year,month)    
+        if year and month:
+                queryset =Employee.objects.filter(Q(date_of_leaving__isnull=True)|Q(date_of_leaving__range=[period['from_date'],period['to_date']])|Q(date_of_leaving__gte=period['from_date']),date_of_joining__lte=period['to_date']).all().order_by('employee_no')
+        else:
+                queryset =Employee.objects.none()
+        context = {"form": form}
+        if queryset:
+            data=get_monthly_report(queryset,year,month)
+            context['rows']=data['rows']
+            context['totals']=data['totals']
+    return render(request, template_name, context)

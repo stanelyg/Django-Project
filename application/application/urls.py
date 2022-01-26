@@ -23,5 +23,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('employees/',include('employees.urls')),   
     path('attendance/',include('attendance.urls')),   
+    path('salaryreports/',include('salaryreports.urls')),
     path('',include('dbmaster.urls')),  
 ]

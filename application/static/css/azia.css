@@ -41819,3 +41819,8 @@ input:focus {
 
 .wd-100v {
   width: 100vw; }
+
+  .tr-btn{
+    text-align: left !important;
+    padding: 5px 20px !important;
+    }

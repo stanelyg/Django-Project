@@ -1,7 +1,7 @@
 from django.db import models
 from decimal import Decimal ,ROUND_HALF_UP
 import  datetime,calendar
-
+from decimal import Decimal, ROUND_HALF_UP
 from django.contrib.auth.models import User
 # Create your models here.
 
@@ -63,8 +63,8 @@ def check_open_month(year,month):
         return True
      else:
         return False
-def period_dates(year,month):
-    return {'from_date':datetime.date(year,month,1),'to_date':datetime.date(year,month,calendar.monthlen(year, month))}
+def period_dates(year,month):  
+    return {'from_date':datetime.date(int(year),int(month),1),'to_date':datetime.date(int(year),int(month),calendar.monthrange(int(year), int(month))[1])}
     
 class WorkingHour(models.Model):
       work_hour_name=models.CharField(max_length=100)
@@ -129,3 +129,13 @@ def navigate_model(nav_btn_data,data_model):
 def get_post_array(tup, di):
     di = dict(tup)
     return di
+def round_half_up(number, ndigits=None):
+    return_type = type(number)
+    if ndigits is None:
+        ndigits = 0
+        return_type = int
+    if not isinstance(ndigits, int):
+        msg = f"'{type(ndigits).__name__}' object cannot be interpreted as an integer"
+        raise TypeError(msg)
+    quant_level = Decimal(f"10E{-ndigits}")
+    return return_type(Decimal(number).quantize(quant_level, ROUND_HALF_UP))
