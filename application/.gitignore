@@ -1,1 +1,44 @@
 .env
+# virtualenv #
+/.env/*
+/env/*
+/venv/*
+/virtual/*
+/application/Attachments/*/*.pdf
+/application/Attachments/*/*.png
+/application/Attachments/*/*.jpeg
+/application/Attachments/*/*.jpg
+
+
+
+
+
+
+/.vscode/*
+.DS_Store
+
+
+
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__
+#media
+
+# Backup files #
+*.bak
+
+# SQLite #
+*.sqlite3
+
+# configs #
+configs.json
+/dumps/*
+!/dumps/.gitkeep
+
+# django migrations #
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py
+

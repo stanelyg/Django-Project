@@ -7,16 +7,10 @@ from decimal import Decimal
 class PayeRelief(models.Model):
       effective_date=models.DateField()
       relief_amount=models.DecimalField(max_digits=12,decimal_places=2)
-
-
       class Meta:
             verbose_name_plural = "Paye Relief"
       def __str__(self):
             return str(self.effective_date)
-
-
-
-
 class Payetable(models.Model):
       annual_gross=models.DecimalField(max_digits=16,decimal_places=4)
       min_gross=models.DecimalField(max_digits=16,decimal_places=4)
@@ -61,6 +55,7 @@ class Payetable(models.Model):
 
 class Nhif(models.Model):
       effective_date=models.DateField()
+      paye_relief_percentage=models.DecimalField(max_digits=5,decimal_places=2)
       class Meta:
             verbose_name_plural = "Nhif"
       def __str__(self):
@@ -101,27 +96,40 @@ class Nssfreferencetable(models.Model):
 
 
       def get_nssf_amount(gross_salary,from_date):
-          nssf_array={}
-          nssf_array['tier_one']=0
-          nssf_array['tier_two']=0
-          nssf_array['nssf_amount']=0
-          rounded_gross=round_half_up(gross_salary,0)
-          queryset=Nssfreferencetable.objects.filter(effective_date__lte=from_date).values().latest('effective_date','tier_one_lower','tier_one_upper','tier_two_lower','tier_two_upper','percentage','employee_contribution')
-          nssf_array['employee_contribution']=queryset['employee_contribution']
-          if rounded_gross >=queryset['tier_one_lower'] and  rounded_gross < queryset['tier_one_upper']:
-             nssf_array['tier_one']+=round_half_up(Decimal(rounded_gross)* queryset['percentage']/100 ,0)
-          else:
-             nssf_array['tier_one']=round_half_up(queryset['tier_one_upper']*(queryset['percentage']/100),0)
-             if rounded_gross > queryset['tier_two_lower'] and rounded_gross < queryset['tier_two_upper']:
-                   nssf_array['tier_two'] = round_half_up((Decimal(rounded_gross)-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
-             else:
-                   nssf_array['tier_two'] = round_half_up((queryset['tier_two_upper']-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
+            nssf_array={}
+            nssf_array['tier_one']=0
+            nssf_array['tier_two']=0
+            nssf_array['nssf_amount']=0
+            rounded_gross=round_half_up(gross_salary,0)
+            queryset=Nssfreferencetable.objects.filter(effective_date__lte=from_date).values().latest('effective_date','tier_one_lower','tier_one_upper','tier_two_lower','tier_two_upper','percentage','employee_contribution')
+            nssf_array['employee_contribution']=queryset['employee_contribution']
+            if rounded_gross >=queryset['tier_one_lower'] and  rounded_gross < queryset['tier_one_upper']:
+                  nssf_array['tier_one']+=round_half_up(Decimal(rounded_gross)* queryset['percentage']/100 ,0)
+            else:
+                  nssf_array['tier_one']=round_half_up(queryset['tier_one_upper']*(queryset['percentage']/100),0)
+                  if rounded_gross > queryset['tier_two_lower'] and rounded_gross < queryset['tier_two_upper']:
+                        nssf_array['tier_two'] = round_half_up((Decimal(rounded_gross)-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
+                  else:
+                        nssf_array['tier_two'] = round_half_up((queryset['tier_two_upper']-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
+            print(nssf_array['tier_two'])
+            nssf_array['nssf_amount']+=Decimal(nssf_array['tier_one']+  nssf_array['tier_two'])
 
-          nssf_array['nssf_amount']+=Decimal(nssf_array['tier_one']+  nssf_array['tier_two'])
-
-          return nssf_array
+            return nssf_array
       def __str__(self):
             return str(self.effective_date)
+
+
+class OverTimeSetting(models.Model):
+      effective_date=models.DateField()
+      ot1_factor=models.DecimalField(max_digits=5,decimal_places=2)
+      ot2_factor=models.DecimalField(max_digits=5,decimal_places=2)
+
+      class Meta:
+            verbose_name_plural='Over Time Settings'
+
+      def __str__(self):
+            return str(self.effective_date)
+
 
 
 

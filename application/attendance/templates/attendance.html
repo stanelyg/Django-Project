@@ -71,7 +71,7 @@
     #detailTable input,select {border: 0 !important; width: 100% !important; border-radius: 0 !important; background-color: #fff;}
     #tb-master input,select {border: 0 !important; width: 100% !important; border-radius: 0 !important; background-color: #fff;}
 </style>
-<div class="pd-50 pd-sm-60 bg-white-6 wd-xl-80p" style="margin: 0 auto;">
+<div class="pd-50 pd-sm-60 bg-white-6 wd-xl-100p" style="margin: 0 auto;">
     <form action="{% url 'attendance:attendance-create' %}" method="POST" id="attendanceForm">
         {% csrf_token %}
         {{form.media}}
@@ -116,7 +116,7 @@
             </tr>
             </table>
     </div><!-- row -->
-    <div class="row row-xs align-items-center mg-b-20 table-responsive" style="width:900px;overflow-y:scroll;" id="detaildiv">
+    <div class="row row-xs align-items-center mg-b-20 table-responsive" style="width:930px;overflow-y:scroll;" id="detaildiv">
         <table class="table table-striped table-bordered table-hover table-sm" style="margin-bottom:-20px !important" id="detailTable">
             <thead>
             <tr class="info">

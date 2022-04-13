@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static  %}
 {% load humanize %}
+{% load custom_filters %}
 {% block content %}
 
 <script>
@@ -53,7 +54,7 @@
         background-color: #bbb;
     }
     </style>
-<div class="" style="width: 700px;padding-right: 25px;margin: 0 auto !important;">
+<div class="" style="width: 700px;padding-right: 25px;z-index:-2;margin: 0 auto !important;">
     <form action="" method="GET" id="monthly-report" class="deptsForm">
     {% csrf_token %}
     {{ form.errors }}
@@ -82,7 +83,39 @@
     </form>
     
 </div>
-<div class="3250px;">
+<div class="1500px;">
+    {% if object_list.table %}
+    <table class="table table-bordered table-minimal exportTbl" id="detail-table">
+        <caption style="display:none;">Monthly Salary Report-{{object_list.form.year.value}}-{{object_list.form.month.value}} </caption>
+        <thead class="info">
+        <tr>
+            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Si</td>          
+            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Emp No</td>            
+            <td style="font-weight:bold; vertical-align:bottom;">Name</td>
+            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">National ID</td>            
+            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Daily Rate</td>
+            {% for key,names in object_list.return_data.value_keys.items %}
+                <td style="font-weight:bold; vertical-align:bottom;" class="{{key}}">{{names}}</td>
+            {%endfor%}
+        </tr>
+        </thead>
+        <tbody id="tbody">
+            {% for key,row in  object_list.table.items %}           
+            <tr>
+                <td>{{forloop.counter}}</td>            
+                <td class="text-left" style="white-space: nowrap">{{row.employee_no}}</td>
+                <td class="text-left" style="white-space: nowrap">{{row.employee_name}}</td>
+                <td class="text-left hidewhentotal" style="white-space: nowrap">{{row.national_id}}</td>
+                <td class="text-right" style="white-space: nowrap">{{row.gross_daily_rate|intcomma}}</td>                
+                {% for key,name in object_list.return_data.value_keys.items %}
+                <td class="text-right">{{row|dict_lookup:key|intcomma}}</td>
+                {%endfor%}
+           </tr>
+          {%endfor%}
+        </tbody>
+    </table>
+    {%endif%}
+
    
 
 </div>

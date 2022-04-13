@@ -1,0 +1,202 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+{% block content %}
+<script>
+function exportCSV(){
+    $(".exportTbl").tableToCSV();
+}
+function toggleClass(el, className) {
+    if (el.className.indexOf(className) >= 0) {
+        el.className = el.className.replace(className,"");
+    }
+    else {
+        el.className  += className;
+    }
+}
+function ShowHighlighted(cb){
+	if(cb.checked){
+        $("#tbody").find("tr").hide();
+        $("#tbody").find(".selected").show();
+	}
+	else{
+	    $("#tbody").find("tr").show();
+	}
+}
+</script>
+<style>
+    .selected
+    {
+        background-color: #ff8;
+    }
+</style>
+<div class="container" style="width: 600px;padding-top: 0.2cm;">
+    <form action="" method="GET" id="itax-report" class="deptsForm">
+    {% csrf_token %}
+    {{ form.errors }}
+    <table id="form" class="table table-striped table-bordered table-hover table-minimal table-scroll">
+        <tr class="info">
+            <td class="text-center" colspan="6">
+                <h5>Itax Benefit Report</h5>
+            </td>
+        </tr>
+        <tr>
+            {% for field in object_list.form %}
+            <td><strong>{{ field.label }}:</strong> {{field}}</td>
+            {% endfor %}
+            </tr>
+        </tr>
+        <tr class="info">
+            <td class="text-left tr-btn"  colspan="6">
+                <input  class="btn btn-success btn-form"  type="submit" value="Submit" />
+                {% if object_list.table %}
+                <input  class="btn btn-info btn-form"  type="submit" onclick="exportCSV()" value="Export" />
+                <a href="{% url 'salaryreports:itax-report' %}"  class="btn btn-danger btn-form">Cancel</a>
+                {%endif%}
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-center bg-warning">
+                <label for="highlightcb"><input id="highlightcb" type="checkbox" onclick="ShowHighlighted(this);" class="auth-ro-allow" style="width: unset ! important;">Highlighted Only</label>
+
+            </td>
+        </tr>
+        </table>
+    </form>
+</div>
+<div style="width: 3250px;">
+    {% if object_list.table %}
+    <table class="table table-bordered table-minimal exportTbl" id="detail-table">
+        <caption style="display:none;">ITax Report-{{object_list.form.year.value}}-{{object_list.form.month.value}} </caption>
+        <thead >
+        <tr class="info noExport">
+            <th>SI</th>
+            <th>PIN of Employee</th>
+            <th>Name Employee</th>
+            <th>Residential Status</th>
+            <th>Type of Employee</th>
+            <th>Basic Salary</th>
+            <th>Housing Allowance</th>
+            <th>Transport Allowance</th>
+            <th>Leave Pay</th>
+            <th>Over Time Allowance</th>
+            <th>Director's Fee</th>
+            <th>Lump Sum Payment</th>
+            <th>Other Allowance</th>
+            <th>Total Cash Pay</th>
+            <th>Value of Car Benefit</th>
+            <th>Other Non Cash Benefits</th>
+            <th>Total Non Cash Pay</th>
+            <th></th>
+            <th>Type of Housing</th>
+            <th>House Quota</th>
+            <th>Computed Rent of House</th>
+            <th>Rent Recovered </br> From Employee</th>
+            <th>Net Value of Housing</th>
+            <th>Total Gross Pay</th>
+            <th>30% of Cash Pay</th>
+            <th>Actual Contribution</th>
+
+            <th>Permissible Limit</th>
+            <th>Mortgage Interest</th>
+            <th>Deposit on Home</th>
+            <th>Amount of Benefit</th>
+            <th>Taxable Pay</th>
+            <th>Tax Payable</th>
+            <th>Monthly Personal Relief</th>
+            <th>Amount of Insurance Relief</th>
+            <th>PAYE Tax</th>
+            <th>Self Assessed PAYE Tax</th>
+        </tr>
+        </thead>
+        <tbody id="tbody">
+        {% for key,row in object_list.table.items %}
+        <tr onclick="toggleClass(this,'selected');">
+            <td class="noExport">{{forloop.counter}}</td>
+            <td class="text-left">{{row.pin_no}}</td>
+            <td class="text-left" style="white-space: nowrap"> {{row.employee_name}}</td>
+            <td style="white-space: nowrap">Resident</td>
+            <td class="text-left" style="white-space: nowrap">{{row.type_of_employee}}</td>
+            <td class="text-right">{{row.basic_salary}}</td>
+            <td class="text-right">{{row.housing_amount}}</td>
+            <td class="text-right">0</td>
+            <td class="text-right">{{row.leave_encashed_amount|floatformat:2|intcomma }}</td>
+            <td class="text-right">{{row.over_time_allowance|floatformat:2|intcomma}}</td>
+            <td class="text-right">{{row.directors_fee|floatformat:2|intcomma}}</td>
+            <td class="text-right">0</td>
+            <td class="text-right">{{row.other_allowance|floatformat:2|intcomma}}</td>
+            <td class="text-right"></td>
+            <td class="text-right">{{row.vehicle_benefit|floatformat:2|intcomma}}</td>
+            <td class="text-right">{{row.other_benefit_amount|floatformat:2|intcomma}}</td>
+            <td></td>
+            <td class="text-right">{%if row.house_quota == 0 %}0{%else%}{%endif%}</td>
+            <td class="text-right" style="white-space: nowrap">{%if row.house_quota > 0 %}Employer's Owned House{%else%}Benefit not given{%endif%}</td>
+            <td class="text-right">{%if row.house_quota > 0 %}{{row.house_quota|floatformat:2|intcomma}}{%else%}{%endif%}</td>
+            <td></td>
+            <td class="text-right">{{row.rent_recovered|floatformat:2|intcomma}}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{row.nssf_amount|floatformat:2|intcomma}} </td>
+            <td class="text-right">{{row.permissible_limit}}</td>
+            <td class="text-right">{{row.mortgage_interest}}</td>
+            <td>0</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td class="text-right">{{row.paye_relief|floatformat:2|intcomma}}</td>
+            <td class="text-right">{{row.insurance_relief|floatformat:2|intcomma}}</td>
+            <td class="text-right"></td>
+            <td class="text-right">{{row.paye_amount|floatformat:2|intcomma}}</td>
+        </tr>
+        {%endfor%}
+        </tbody>
+        <tfoot>
+            <tr class="info noExport" style="font-weight: bold;">
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Totals</td>
+                <td class="text-right">{{object_list.paye_total|floatformat:2|intcomma}}</td>
+            </tr>
+
+
+        </tfoot>
+    </table>
+    {%endif%}
+
+</div>
+
+
+
+{%endblock%}

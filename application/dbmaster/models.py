@@ -69,6 +69,7 @@ def period_dates(year,month):
 class WorkingHour(models.Model):
       work_hour_name=models.CharField(max_length=100)
       normal_hour=models.CharField(max_length=2)
+      hours_in_month=models.CharField(max_length=3)
       sun=models.CharField(max_length=2)
       mon=models.CharField(max_length=2)
       tue=models.CharField(max_length=2)
@@ -81,7 +82,29 @@ class WorkingHour(models.Model):
 
       def __str__(self):
                 return self.work_hour_name
-    
+class Company(models.Model):
+     name=models.CharField(max_length=150)
+     nssf_no=models.CharField(max_length=150)
+     nhif_no=models.CharField(max_length=50)
+     nita_no=models.CharField(max_length=50)
+     post_address=models.CharField(max_length=250)
+     pin_no=models.CharField(max_length=50)
+     helb_no=models.CharField(max_length=50)
+     physical_address=models.CharField(max_length=150)
+     email_addresss=models.CharField(max_length=150)
+     phone_no=models.CharField(max_length=50)
+     mobile_no=models.CharField(max_length=150)
+
+     class Meta:
+            verbose_name_plural="Company"
+     def get_company_details():
+          queryset=Company.objects.values()
+          if queryset:
+             return  queryset[0]
+
+     def __str__(self):
+           return str(self.name)
+
     
 def navigate_model(nav_btn_data,data_model):
      if nav_btn_data['nav-button']=='first':

@@ -12,4 +12,11 @@ class MonthlyReportForm(forms.Form):
     month=forms.ChoiceField(
     choices=SalaryPeriod.get_months,
     required=False)
+class StatutoryReportForm(forms.Form):
+    year = forms.ChoiceField(choices=(SalaryPeriod.get_years))
+    month = forms.ChoiceField(choices=(SalaryPeriod.get_months))
+
+class ItaxReportForm(forms.Form):
+    year = forms.ChoiceField(choices=(SalaryPeriod.get_years))
+    month = forms.ChoiceField(choices=(SalaryPeriod.get_months))
     

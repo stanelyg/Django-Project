@@ -1,0 +1,260 @@
+{% extends 'layouts/base.html' %}
+{% load humanize %}
+{% block content %}
+<script>
+$(document).ready(function() {
+            $('input[type=radio][name=radioView]').change(function(){
+                if (this.value == 'nssf_report') {
+                    $("#nssf-report").show(1000);
+                    $('#nssf-report').find('table').addClass('exportTbl');
+                    $("#nhif-report").hide(1000);
+                    $('#nhif-report').find('table').removeClass('exportTbl');
+                    $('#nssf_detailTable').find('tbody').attr('id','tbody')
+
+                }
+                else if (this.value == 'nhif_report') {
+                    $("#nssf-report").hide(1000);
+                    $('#nssf-report').find('table').removeClass('exportTbl');
+                    $("#nhif-report").show(1000);
+                    $('#nhif-report').find('table').addClass('exportTbl');
+                    $('#nssf_detailTable').find('tbody').removeAttr('id')
+
+                }
+
+            });
+});
+function exportCSV(){
+    $(".exportTbl").tableToCSV();
+}
+function toggleClass(el, className) {
+    if (el.className.indexOf(className) >= 0) {
+        el.className = el.className.replace(className,"");
+    }
+    else {
+        el.className  += className;
+    }
+}
+function ShowHighlighted(cb){
+	if(cb.checked){
+        $("#tbody").find("tr").hide();
+        $("#tbody").find(".selected").show();
+	}
+	else{
+	    $("#tbody").find("tr").show();
+	}
+}
+$(function(){
+     $('#selectall').on('change', function(){
+       $('.selectemp').prop('checked',this.checked);
+    });
+ });
+</script>
+<style>
+    .selected
+    {
+        background-color: #ff8;
+    }
+</style>
+<div class="container" style="width: 600px;padding-top: 0.2cm;">
+    <form action="" method="GET" id="monthly-report" class="deptsForm">
+    {% csrf_token %}
+    {{ form.errors }}
+    <table id="form" class="table table-striped table-bordered table-hover table-minimal table-scroll">
+        <tr class="info">
+            <td class="text-center" colspan="6">
+                <h5>Nssf-Nhif Report</h5>
+            </td>
+        </tr>
+        <tr>
+            {% for field in object_list.form %}
+            <td><strong>{{ field.label }}:</strong> {{field}}</td>
+            {% endfor %}
+            </tr>
+        </tr>
+        <tr class="info">
+            <td class="text-left tr-btn"  colspan="6">
+                <input  class="btn btn-success btn-form"  type="submit" value="Submit" />
+                {% if object_list.nssf_table %}
+                <input  class="btn btn-info btn-form"  type="submit" onclick="exportCSV()" value="Export" />
+                <a href="{% url 'salaryreports:nssf-nhif-report' %}"  class="btn btn-danger btn-form">Cancel</a>
+
+            </td>
+        </tr>
+        <tr>
+            <td colspan="6" class="text-center bg-warning">
+                <label for="nssf_report"><input   type="radio" value="nssf_report"     name="radioView" style="width: unset ! important;">Nssf Report</label>
+                <label for="nhif_report"><input   type="radio" value="nhif_report"     name="radioView" style="width: unset ! important;">Nhif Report</label>
+                <label for="highlightcb"><input id="highlightcb" type="checkbox" onclick="ShowHighlighted(this);" class="auth-ro-allow" style="width: unset ! important;">Highlighted Only</label>
+
+            </td>
+        </tr>
+        {%endif%}
+        </table>
+    </form>
+</div>
+{% if object_list.nssf_table %}
+<div class="container" id="nssf-report"  style="width:1300px;">
+    <table class="table table-bordered table-hover table-minimal exportTbl" id="nssf_detailTable">
+        <caption style="display:none;">Nssf Report-{{object_list.form.year.value}}-{{object_list.form.month.value}} </caption>
+        <thead>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>NSSF CONTRIBUTION</strong></td>
+                    <td class="noExport text-left" colspan="2"><strong>&nbsp;</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>EMPLOYER KRA PIN:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.company_pin}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>EMPLOYER NUMBER :</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.company_nssf_no}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>EMPLOYER NAME :</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.company_name}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>CONTRIBUTION PERIOD:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.contribution_month}}{{object_list.contribution_year}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>TOTAL INCOME:</strong></td>
+                    {% comment %} <td class="text-left" colspan="2"><strong>{{object_list.total_income}}</strong></td> {% endcomment %}
+                    <td class="text-left" colspan="2"><strong>0</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>TOTAL MEMBER:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.nssf_total_member}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>TOTAL EMPLOYER:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.nssf_total_employer}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>TOTAL CONTRIBUTIONS:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.nssf_grand_total}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="text-left" colspan="2"><strong>TOTAL RECORDS:</strong></td>
+                    <td class="text-left" colspan="2"><strong>{{object_list.nssf_total_records}}</strong></td>
+                </tr>
+                <tr>
+                    <td class="noExport text-center" colspan="2"><strong>&nbsp;</strong></td>
+                </tr>
+
+                <tr class="info">
+                    <td class="noExport text-center"><strong>SI</strong></td>
+                    <td class="text-center"><strong>PAYROLL NUMBER</strong></td>
+                    <td class="text-center"><strong>SURNAME</strong></td>
+                    <td class="text-center"><strong>OTHER NAMES</strong></td>
+                    <td class="text-center"><strong>ID NO</strong></td>
+                    <td class="text-center"><strong>KRA PIN</strong></td>
+                    <td class="text-center"><strong>NSSF NO</strong></td>
+                    <td class="text-center"><strong>GROSS PAY</strong></td>
+                    <td class="text-center"><strong>VOLUNTARY</strong></td>
+                    <td class="noExport text-center"><strong>MEMBER</strong></td>
+                    <td class="noExport text-center"><strong>EMPLOYER</strong></td>
+                    <td class="noExport text-center"><strong>TOTAL</strong></td>
+
+                </tr>
+    </thead>
+    <tbody id="tbody">
+        {% for key,row in object_list.nssf_table.items %}
+        <tr onclick="toggleClass(this,'selected');">
+            <td class="noExport text-center">{{forloop.counter}}</td>
+            <td>{{row.employee_no}}</td>
+            <td class="text-left" style="white-space: nowrap">{{row.employee_name}}</td>
+            <td></td>
+            <td>{{row.national_id}}</td>
+            <td>{{row.pin_no}}</td>
+            <td>{{row.nssf_no}}</td>
+            <td>{{row.gross_salary}}</td>
+            <td>0</td>
+            <td class="noExport">{{row.member_nssf_amount|floatformat:2|intcomma}}</td>
+            <td class="noExport">{{row.employer_nssf_amount|floatformat:2|intcomma}}</td>
+            <td class="text-right">{{row.total_contribution|floatformat:2|intcomma}}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+    <tfoot>
+        <tr class="info">
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td class="noExport">&nbsp;</td>
+        </tr>
+    </tfoot>
+    </table>
+</div>
+{%endif%}
+<div class="container" id="nhif-report"  style="width:1000px;display: none;">
+    <table class="table table-bordered table-hover table-minimal" id="detailTable">
+        <caption style="display:none;">Nhif Report-{{object_list.form.year.value}}-{{object_list.form.month.value}} </caption>
+
+    <tr>
+        <td class="text-left" colspan="1"><strong>EMPLOYER CODE </strong></td>
+        <td class="text-left" colspan="1"><strong>{{object_list.company_code}}</strong></td>
+    </tr>
+    <tr>
+        <td class="text-left" colspan="1"><strong>EMPLOYER NAME </strong></td>
+        <td class="text-left" colspan="2"><strong>{{object_list.company_name}}</strong></td>
+
+    </tr>
+    <tr>
+        <td class="text-left" colspan="1"><strong>MONTH OF CONTRIBUTION </strong></td>
+        <td class="text-left" colspan="2"><strong>{{object_list.contribution_month}} {{object_list.contribution_year}}</strong></td>
+
+    </tr>
+    <tr>
+        <td class="noExport text-center" colspan="1"><strong>. </strong></td>
+    </tr>
+
+
+    <tr class="info">
+        <td class="noExport text-center"><strong>SI</strong></td>
+        <td class="noExport text-center"><strong>EMPNO</strong></td>
+        <td class="text-center"><strong>PAYROLL NO</strong></td>
+        <td class="text-center"><strong>LAST NAME</strong></td>
+        <td class="text-center"><strong>FIRST NAME</strong></td>
+        <td class="text-center"><strong>ID NO</strong></td>
+        <td class="text-center"><strong>NHIF NO</strong></td>
+        <td class="text-center"><strong>AMOUNT</strong></td>
+    </tr>
+    <tbody id="tbody">
+   {% for key,row in object_list.nhif_table.items %}
+    <tr onclick="toggleClass(this,'selected');" >
+        <td class="noExport text-center">{{forloop.counter}}</td>
+        <td class="noExport text-center">{{row.employee_no}}</td>
+        <td>{{row.employee_no}}</td>
+        <td class="text-left" style="white-space: nowrap">{{row.employee_name}}</td>
+        <td class="text-left" style="white-space: nowrap"></td>
+        <td>{{row.national_id}}</td>
+        <td>{{row.nhif_no}}</td>
+        <td class="text-right">{{row.nhif_amount}}</td>
+    </tr>
+    {%endfor%}
+    </tbody>
+        <tfoot>
+            <tr class="info">
+                    <td class="noExport text-center"><strong></strong></td>
+                    <td class="noExport text-center"><strong></strong></td>
+                    <td><strong></strong></td>
+                    <td><strong></strong></td>
+                    <td><strong></strong></td>
+                    <td><strong></strong></td>
+                    <td><strong>Totals</strong></td>
+                    <td class="text-right"><strong>{{object_list.nhif_total|intcomma}}</strong></td>
+            </tr>
+        </tfoot>
+ </table>
+</div>
+
+{%endblock%}

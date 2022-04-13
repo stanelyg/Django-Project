@@ -79,11 +79,9 @@
             <li class="nav-item">
               <a href="" class="nav-link with-sub"><i class="typcn typcn-edit"></i>Statutories Report</a>
               <nav class="nav-sub">
-                <a href="form-elements.html" class="nav-sub-link">Form Elements</a>
-                <a href="form-layouts.html" class="nav-sub-link">Form Layouts</a>
-                <a href="form-validation.html" class="nav-sub-link">Form Validation</a>
-                <a href="form-wizards.html" class="nav-sub-link">Form Wizards</a>
-                <a href="form-editor.html" class="nav-sub-link">WYSIWYG Editor</a>
+                <a href="/salaryreports/nssf-nhif-report" class="nav-sub-link">Nssf-Nhif Reports</a>
+                <a href="/salaryreports/itax-report" class="nav-sub-link">Itax Report</a>
+                <a href="#" class="nav-sub-link">P9</a>               
               </nav>
             </li><!-- nav-item -->
           
@@ -135,7 +133,7 @@
             </div><!-- az-header-right -->
           </div><!-- container -->
         </div><!-- az-header -->
-        <div class="az-content-body">
+        <div class="az-content-body" >
           {% include "includes/messages.html" %}
             {% block content %}
 
@@ -158,6 +156,7 @@
     <script type="text/javascript" src="{% static 'js/azia.js' %}"></script>
     <script src="{% static 'js/ jquery-3.4.1.js'%}"></script>
     <script src="{% static 'js/jquery-ui.min.js'%}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.tabletoCSV.js' %}"></script>
 
     <script>
       $(function(){
