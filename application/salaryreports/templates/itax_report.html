@@ -29,7 +29,7 @@ function ShowHighlighted(cb){
         background-color: #ff8;
     }
 </style>
-<div class="container" style="width: 600px;padding-top: 0.2cm;">
+<div class="" style="width: 600px;padding-top: 0.2cm;">
     <form action="" method="GET" id="itax-report" class="deptsForm">
     {% csrf_token %}
     {{ form.errors }}
@@ -51,7 +51,7 @@ function ShowHighlighted(cb){
                 {% if object_list.table %}
                 <input  class="btn btn-info btn-form"  type="submit" onclick="exportCSV()" value="Export" />
                 <a href="{% url 'salaryreports:itax-report' %}"  class="btn btn-danger btn-form">Cancel</a>
-                {%endif%}
+                
             </td>
         </tr>
         <tr>
@@ -60,6 +60,7 @@ function ShowHighlighted(cb){
 
             </td>
         </tr>
+        {%endif%}
         </table>
     </form>
 </div>
@@ -113,7 +114,7 @@ function ShowHighlighted(cb){
         <tr onclick="toggleClass(this,'selected');">
             <td class="noExport">{{forloop.counter}}</td>
             <td class="text-left">{{row.pin_no}}</td>
-            <td class="text-left" style="white-space: nowrap"> {{row.employee_name}}</td>
+            <td class="text-left" style="white-space: nowrap">{{row.employee_name}}</td>
             <td style="white-space: nowrap">Resident</td>
             <td class="text-left" style="white-space: nowrap">{{row.type_of_employee}}</td>
             <td class="text-right">{{row.basic_salary}}</td>

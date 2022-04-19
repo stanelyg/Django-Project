@@ -15,11 +15,14 @@ class EmployeeCreateForm(forms.ModelForm):
                     'placeholder':"Emp No",
                     'style':'text-align:center;'
             }),required=False)
-        
-        
-        employee_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
+        first_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
                     'class':"form-control",
-                    'placeholder':"Enter Employee Names ",                                                                 
+                    'placeholder':"Enter First Name",                                                                 
+                }),required=False)
+        
+        other_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
+                    'class':"form-control",
+                    'placeholder':"Enter Other Names ",                                                                 
                 }),required=False)
         date_of_joining=forms.DateField(widget=forms.TextInput(attrs={
                     'id':'date_of_joining',
@@ -86,10 +89,15 @@ class EmployeeUpdateForm(forms.ModelForm):
         }),required=False)
       
       
-    employee_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
-            'class':"form-control",
-            'placeholder':"Enter Employee Names ",                                                                 
-        }),required=False)
+    first_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
+                    'class':"form-control",
+                    'placeholder':"Enter First Name",                                                                 
+                }),required=False)
+        
+    other_name= forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
+                    'class':"form-control",
+                    'placeholder':"Enter Other Names ",                                                                 
+                }),required=False)
     date_of_joining=forms.DateField(widget=forms.TextInput(attrs={
             'id':'date_of_joining',
             'value':'',

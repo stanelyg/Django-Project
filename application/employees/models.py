@@ -15,7 +15,8 @@ from django.urls import reverse
 
 class Employee(models.Model):
       employee_no=models.AutoField(primary_key=True)
-      employee_name=models.CharField(max_length=100)      
+      first_name=models.CharField(max_length=100) 
+      other_name=models.CharField(max_length=100)      
       national_id=models.CharField(max_length=11)      
       date_of_joining=models.DateField()
       date_of_leaving=models.DateField(blank=True,null=True)
@@ -40,11 +41,11 @@ class Employee(models.Model):
 
 def get_employees(request):         
       query = request.GET.get("term", "")
-      emps = Employee.objects.filter(Q(employee_no__icontains=query)|Q(employee_name__icontains=query),is_active=1).all()
+      emps = Employee.objects.filter(Q(employee_no__icontains=query)|Q(first_name__icontains=query)|Q(other_name__icontains=query),is_active=1).all()
       results = []
       for emp in emps:
             new_row={}
-            new_row['label'] = str(emp.employee_no) + ' - '+emp.employee_name
+            new_row['label'] = str(emp.employee_no) + ' - '+emp.first_name +' '+emp.other_name
             new_row['value'] = emp.employee_no
             results.append(new_row)
             data = json.dumps(results)
@@ -56,7 +57,7 @@ def get_emp_details(request):
       q = request.GET.get("code", "")
       emp_details = Employee.objects.filter(employee_no=q)
       for emp in emp_details:
-            data['employee_name'].append(emp.employee_name)
+            data['employee_name'].append(emp.first_name +' '+emp.other_name)
             data['basic_salary'].append(emp.basic_salary)
       return JsonResponse(data, safe = True)
 

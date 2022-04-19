@@ -58,11 +58,13 @@ def get_employee_attendance_details(employee_no,year,month):
     rows['no_of_holidays']=0
     rows['leaves']=0
     rows['absent_days']=0
-    data=get_daily_data(employee_no.employee_no,year,month)    
+    data=get_daily_data(employee_no,year,month)    
     rows['working_days']=len(data['working_days'])
     for row in data['emp_details']:
         rows['employee_no']=row.employee_no
-        rows['employee_name']=row.employee_name
+        rows['employee_name']=row.first_name +' '+row.other_name
+        rows['first_name']=row.first_name,
+        rows['other_name']=row.other_name,
         rows['national_id']=row.national_id          
         rows['basic_salary']=row.basic_salary     
         rows['house_allowance_rate']=row.house_allowance_rate

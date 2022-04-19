@@ -85,9 +85,6 @@ class StatutoryReportView(LoginRequiredMixin,ListView):
         statutories_report_data['contribution_month'] = month
         statutories_report_data['contribution_year'] = year
         return statutories_report_data
-
-
-
 class ItaxReportView(LoginRequiredMixin,ListView):
     form_class = ItaxReportForm
     template_name = 'itax_report.html'

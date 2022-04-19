@@ -56,23 +56,23 @@ def get_statutory_report(year,month,permanent,casual):
     return return_arry
 
 def get_statutory_mult_data(year, month,employee):
-            return_data = get_pay_calculation(year, month, employee)
+            return_data = get_pay_calculation(year, month, employee)            
             # nita_ded=NitaLevy.objects.filter(year=year,month=month).all()
             # nita_amount=0
             # if nita_ded:
             #     nita_amount=nita_ded[0].remmitance_rate
             nhif_data = {
                     'employee_no':return_data['employee_no'],                   
-                    'employee_name':return_data['employee_name'],
-                    # 'last_name':return_data['middle_name'] + ' ' + return_data['last_name'],
+                    'first_name':return_data['first_name'],
+                    'other_name':return_data['other_name'],
                     'national_id':employee.national_id,
                     'nhif_no':employee.nhif_no,
                     'nhif_amount':Decimal(return_data['nhif_amount'])
             }
             nssf_data= {
                     'employee_no':return_data['employee_no'],                   
-                    'employee_name':return_data['employee_name'],
-                    # 'last_name':return_data['middle_name'] + ' ' + return_data['last_name'],
+                    'first_name':return_data['first_name'],
+                    'other_name':return_data['other_name'],
                     'national_id':employee.national_id,
                     'pin_no':employee.pin_no,
                     'nssf_no':employee.nssf_no,

@@ -17,7 +17,7 @@ from salaryreports.models import (NhifDetail,Nhif,Nssfreferencetable,Payetable)
 
 
 def get_attendance_infor(year,month,employee):
-    attendance_data=get_employee_attendance_details(employee,year,month)
+    attendance_data=get_employee_attendance_details(employee.employee_no,year,month)
     attendance_data['employee_no']=attendance_data['employee_no']
     attendance_data['pin_no']=employee.pin_no
     attendance_data['national_id']=employee.national_id 
