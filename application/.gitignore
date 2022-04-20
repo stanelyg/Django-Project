@@ -31,6 +31,7 @@ __pycache__
 
 # SQLite #
 *.sqlite3
+/application/*.sqlite3
 
 # configs #
 configs.json

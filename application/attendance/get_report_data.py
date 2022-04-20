@@ -63,8 +63,8 @@ def get_employee_attendance_details(employee_no,year,month):
     for row in data['emp_details']:
         rows['employee_no']=row.employee_no
         rows['employee_name']=row.first_name +' '+row.other_name
-        rows['first_name']=row.first_name,
-        rows['other_name']=row.other_name,
+        rows['first_name']=row.first_name
+        rows['other_name']=row.other_name
         rows['national_id']=row.national_id          
         rows['basic_salary']=row.basic_salary     
         rows['house_allowance_rate']=row.house_allowance_rate
@@ -89,11 +89,8 @@ def get_monthly_report(employee_data,year,month):
     attendance_totals['dict_length']=0
     attendance_totals['sum_holidays']=0
     attendance_totals['sum_absent_days']=0
-
-    partial_multi = functools.partial(get_monthly_data_multi, year, month)
-    with Pool(processes=cpu_count()-1) as pool:
-        multi_data = pool.map(partial_multi, employee_data)
-    for data in multi_data:
+    for employee in employee_data:
+        data=get_monthly_data_multi(year,month,employee)
         attendance_data[data['employee_no']] =data
         attendance_totals['sum_paid_leaves']+=Decimal(data['leaves'])
         attendance_totals['sum_worked_days']+=Decimal(data['worked_days'])

@@ -25,10 +25,8 @@ def get_statutory_report(year,month,permanent,casual):
     permanent_employees=0
     permanent_salary_data={}
     casuals_salary_data={}
-    partial_multi = functools.partial(get_statutory_mult_data, year, month)
-    with Pool(processes=cpu_count()-1) as pool:
-        multi_data = pool.map(partial_multi, permanent)
-    for data in multi_data:
+    for employee in permanent:
+        data=get_statutory_mult_data(year,month,employee)
         if data['nssf_data']['member_nssf_amount']>0:
             permanent_employees+=1
             nssf_data[str(data['nssf_data']['employee_no'])+'p']=data['nssf_data']
@@ -56,11 +54,7 @@ def get_statutory_report(year,month,permanent,casual):
     return return_arry
 
 def get_statutory_mult_data(year, month,employee):
-            return_data = get_pay_calculation(year, month, employee)            
-            # nita_ded=NitaLevy.objects.filter(year=year,month=month).all()
-            # nita_amount=0
-            # if nita_ded:
-            #     nita_amount=nita_ded[0].remmitance_rate
+            return_data = get_pay_calculation(year, month, employee)    
             nhif_data = {
                     'employee_no':return_data['employee_no'],                   
                     'first_name':return_data['first_name'],
@@ -85,8 +79,6 @@ def get_statutory_mult_data(year, month,employee):
             }
             return_data['nssf_amount']=nssf_data['member_nssf_amount']
             return_data['paye_amount']=nssf_data['paye_amount']
-
-
             return  {'nssf_data':nssf_data,'nhif_data':nhif_data,'permanent_salary_data':return_data}
 
 

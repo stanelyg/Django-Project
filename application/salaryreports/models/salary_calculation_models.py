@@ -29,15 +29,8 @@ def get_payment_report(employee_data,year,month):
     total_array={}
     employee_count_array={}
     group_list=[]
-    partial_multi = functools.partial(get_pay_calculation,year,month)
-    with Pool(processes=cpu_count()-1) as pool:
-        multi_data = pool.map(partial_multi,employee_data)
     loc_dept_total_array = {}
     value_keys = {
-        # 'working_days':'Working Days',
-        # 'worked_days':'Worked Days', 
-        # 'no_of_holidays':'Holidays', 
-        # 'leaves': 'Leaves',
         'basic_salary':'Basic Salary',
         'housing_amount':'Housing Amount',
         'absent_days':'Absent Days',
@@ -57,7 +50,8 @@ def get_payment_report(employee_data,year,month):
     temp_dept_empno = None
     temp_dept_empno_last = None
     loc_dept_single = True
-    for pay_data in multi_data:
+    for employee in employee_data:
+        pay_data=get_pay_calculation(year,month,employee)
         rows[pay_data['employee_no']]=pay_data
         total_array = get_total_payment(pay_data,value_keys,total_array)    
     return_data={}
