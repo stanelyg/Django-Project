@@ -111,7 +111,7 @@ class Nssfreferencetable(models.Model):
                         nssf_array['tier_two'] = round_half_up((Decimal(rounded_gross)-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
                   else:
                         nssf_array['tier_two'] = round_half_up((queryset['tier_two_upper']-queryset['tier_two_lower']) * (queryset['percentage']/100),0)
-            print(nssf_array['tier_two'])
+         
             nssf_array['nssf_amount']+=Decimal(nssf_array['tier_one']+  nssf_array['tier_two'])
 
             return nssf_array

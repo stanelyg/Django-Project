@@ -1,0 +1,331 @@
+{% extends 'layouts/base.html' %}
+{% block content %}
+{% load static %}
+{% load humanize %}
+{% load custom_filters %}
+<style  TYPE="text/css" scoped>
+    .hide_zeros{
+    display:none;
+    }
+    
+    td{ height: 0px; }
+
+    page[size="A4"] {
+      background: white;
+      width: 8.2in;
+      height: 10.5in;
+      display: block;
+      margin: 0 auto;
+      margin-bottom: 0.5cm;
+      box-shadow: 0 0 0.5cm rgba(0,0,0,1);
+    }
+
+    @media print {
+     .hide-on-print {display:none;}
+      body, page[size="A4"] {
+        margin: 0.5cm;
+        box-shadow:none;
+        display: inline;
+        
+      }
+     @page{
+        margin:0
+        }
+    }
+</style>
+<div class="az-content-body-left">
+    <div class="az-content-breadcrumb">
+        <span>Home</span>
+        <span>PaySlips</span>
+    </div>
+    <div class="card card-body">
+        <div class="col-lg-12 hide-on-print">
+            <form action="{% url 'salaryreports:payslip-print-preview'%}" method="POST" id="payslip" class="deptsForm">
+            {% csrf_token %}
+            {{form.errors}}
+            {{form.media}}
+            <div class="row" style="font-weight: bolder;">
+                <div class="col-lg-2">Year</div>
+                <div class="col-lg-2">Month</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-2">{{form.year}}</div>
+                <div class="col-lg-2">{{form.month}}</div>
+            </div>
+             <div class="row">&nbsp;</div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <input  class="btn btn-success hide-on-print"  type="submit" value="Get PaySlip" />&nbsp;
+                    {% if data %}
+                    <button class="btn btn-info btn-form hide-on-print" style="background-color: #e7e7e7; color: black;" onclick="window.print();" >Print</button>&nbsp;
+                    <a href="{% url 'salaryreports:payslip-print-preview' %}"  class="btn btn-danger btn-form">Reset</a>
+                    {%endif%}
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 hide-on-print">&nbsp;</div>
+        <div class="col-lg-12">
+        {% for pagekey,row_data in data.items %}
+            <page size="A4">
+            <div class="container-fluid" id="detaildiv" id="wid" style="width:8.1in;height: 10.5in;" >  
+                <table class="table">
+                     <tr>
+                         {% for key,data in row_data.items %}
+                         <td>
+                            <table class="table table-bordered table-hover table-minimal" style="margin: 20px 0px 0px 0px ! important; width: 350px;" > 
+                                <tbody id="fbody">
+                                        <tr>
+                                            <td class="text-center" colspan="3" style="white-space: nowrap"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="3"><strong>Pay Slip For:{{month}}-{{year}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                             <td class="text-left" colspan="3" style="font-weight: bold;">
+                                                 Name:&nbsp;&nbsp; 
+                                                 <strong style="font-size: 14px;">
+                                                {{ data.employee_name}}
+                                                 </strong></br>
+                                                 Employee No:<strong>{{data.national_id}}</strong>
+                                                </br>
+                                                PIN :&nbsp;&nbsp;{{data.pin_no}}</br>
+                                                National ID:&nbsp;&nbsp;<strong>{{data.national_id}}</strong></br>
+                                                NSSF No:&nbsp;&nbsp;<strong>{{data.nssf_no}}</strong></br>
+                                                NHIF No:&nbsp;&nbsp;<strong>{{data.nhif_no}}</strong></br>
+                                            </td>
+                                        </tr> 
+                                        <tr>
+                                            <td><strong>DESCRIPTION</strong></td>
+                                            {% if type == 0 %}
+                                            <td class="text-center"><strong>DAYS/YEARS</strong></td>
+                                            {%endif%}
+                                            <td class="text-right"><strong>AMOUNT</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Basic Salary</td>
+                                            {% if type == 0 %}
+                                                  <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.basic_salary|intcomma}}</td>	
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Housing Amount</td>
+                                            {% if type == 0 %}
+                                              <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.housing_amount|intcomma}}</td>
+                                        </tr>                        
+                                        <tr class="{% if  data.vehicle_benefit == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left">Vehicle Benefit</td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.vehicle_benefit|intcomma}}</td>
+                                        </tr>
+                                        <tr class="{% if  data.other_benefit_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left">Other Benefits</td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.other_benefit_amount|intcomma}}</td>
+                                        </tr>                            
+                                        <tr class="{% if  data.leave_encashed_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" >Leave Encash</td>
+                                            <td class="text-right">{{data.leave_encashed_days}}</td>
+                                            <td class="text-right" >{{data.leave_encashed_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr class="{% if  data.severance_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" >Severance Amount</td>	
+                                            <td class="text-right">{{data.severance_years}}</td>
+                                            <td class="text-right" >{{data.severance_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr class="{% if  data.notice_pay_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" >Notice Pay</td>	
+                                            <td class="text-right">{{data.notice_pay_days}}</td>
+                                            <td class="text-right" >{{data.notice_pay_amount|intcomma}}</td>
+                                        </tr>
+            
+                                        <tr class="{% if  data.notice_recovery_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" >Notice Pay</td>	
+                                            <td class="text-right">{{data.notice_recovery_days}}</td>
+                                            <td class="text-right" >{{data.notice_recovery_amount|intcomma}}</td>
+                                        </tr>
+            
+                                        <tr class="{% if  data.worked_days_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" >Days Paid</td>	
+                                            <td class="text-right">{{data.worked_days}}</td>
+                                            <td class="text-right" >{{data.worked_days_amount|intcomma}}</td>
+                                        </tr>
+                                        
+                                        <tr  class="{% if  data.over_time_one_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td   class="text-left" >OT1 Amount</td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+                                            <td   class="text-right" >{{data.over_time_one_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr class="{% if  data.over_time_two_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td   class="text-left" >OT2 Amount</td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+            
+                                            <td   class="text-right" >{{data.over_time_two_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr class="hide_zeros">
+                                            <td  class="text-left" >Salary Bonus</td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+                                            <td  class="text-right" ></td>
+                                        </tr>    
+                                        <tr class="{% if  data.absent_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td  class="text-left" >Absent Amount</td>
+                                            {% if type == 0 %}
+                                               <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.absent_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="font-weight: bolder;">GROSS PAY</th>	
+                                            {% if type == 0 %}
+                                                 <td></td>
+                                            {%endif%}
+                                            <td class="text-right" >{{data.gross_salary|intcomma}}<strong></strong></td>
+                                        </tr>
+                                        <tr class="{% if  data.final_pay_amount == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" ><strong>Final Pay Amount</strong></td>
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+            
+                                            <td class="text-right" ><strong>{{data.final_pay_amount|intcomma}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">PAYE</td>	
+                                            {% if type == 0 %}
+                                                <td></td>
+                                            {%endif%}
+            
+                                            <td class="text-right">{{data.paye_amount|intcomma}}</td>	
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">NSSF</td>
+                                            {% if type == 0 %}
+                                               <td></td>
+                                            {%endif%}
+            
+                                            <td class="text-right">{{data.nssf_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">NHIF</td>
+                                            {% if type == 0 %}
+                                               <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.nhif_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr class="{% if  data.salary_advance == 0 %}hide_zeros{%else%}{%endif%}">
+                                            <td class="text-left" style="white-space: nowrap;">Salary Advance</td>	
+                                            {% if type == 0 %}
+                                               <td></td>
+                                            {%endif%}
+            
+                                            <td class="text-right">{{data.salary_advance|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="white-space: nowrap; font-weight: bolder;">TOTAL DEDUCTIONS</th>
+                                            {% if type == 0 %}
+                                            <td></td>
+                                         {%endif%}
+            
+                                            <td class="text-right" style="white-space: nowrap;"><strong>{{data.total_deduction|intcomma}}</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Contribution(-)</td>	
+                                            {% if type == 0 %}
+                                                 <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.nssf_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Taxable Income</td>	
+                                            {% if type == 0 %}
+                                                 <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.taxable_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Tax Chargeable</td>	
+                                            {% if type == 0 %}
+                                                 <td></td>
+                                            {%endif%}
+                                            <td class="text-right">{{data.tax_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Relief of Month(-)</th>
+                                            <td class="text-right" colspan="2">{{data.relief_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Insurance Relief</th>
+                                            <td class="text-right" colspan="2">{{data.insurance_relief|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th>NSSF Employer</th>
+                                            <td class="text-right" colspan="2">{{data.nssf_amount|intcomma}}</td>
+                                        </tr>
+                                        <tr>
+                                            <th style="font-weight: bolder;">NET SALARY</th>
+                                            <td class="text-right" colspan="2"><strong>{{data.net_salary|intcomma}}</strong></td>
+                                        </tr>
+                                        
+                                        
+
+                                        
+                                        <tr>
+                                            <td class="text-left">PayMethod:</td>
+                                            <td class="text-right" colspan="2">{{data.payment_method}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left">Print Date:</td>
+                                            <td class="text-right" colspan="2">{% now "Y-m-d" %} </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-left" colspan="3">Signature:</td>
+                                        </tr>
+                                </tbody>
+                            </table>  
+                            &nbsp;&nbsp; 
+
+
+
+
+
+
+                         </td>
+                         {%endfor%}
+                        
+                     </tr>
+
+                </table>
+            </div>
+            </page>
+            <p style="page-break-after:always;"></p>
+        {%endfor%}
+
+
+
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

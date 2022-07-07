@@ -11,7 +11,7 @@ from django.shortcuts import render
 from django.views.generic.list import ListView
 from employees.models import Employee
 from dbmaster.models import Company,round_half_up
-from salaryreports.forms import MonthlyReportForm,StatutoryReportForm,ItaxReportForm
+from salaryreports.forms import MonthlyReportForm,StatutoryReportForm,ItaxReportForm,PayslipForm
 from salaryreports.models import (get_pay_calculation,get_payment_report,get_statutory_report)
 
 
@@ -140,6 +140,57 @@ class ItaxReportView(LoginRequiredMixin,ListView):
         itax_report_data['paye_total']=total_paye_amount
         return itax_report_data
 
+class EmployeePaySlipView(LoginRequiredMixin,ListView):
+        form_class=PayslipForm
+        template_name ='payslips/employee_pay_slip_form.html'
+        def get(self, request,**kwargs):
+                form = self.form_class(initial=self.get_initial())
+                return render(request,self.template_name, {'form': form})
+        def get_initial(self):
+                initial_base={}
+                initial_base['year']=(datetime.datetime.now().year ,self.request.GET.get('year'))[self.request.GET.get('year') is not None]
+                initial_base['month']=(datetime.datetime.now().month,self.request.GET.get('month')) [self.request.GET.get('month') is not None]
+                return initial_base
+            
+def get_print_preview(request):
+    form=PayslipForm()
+    template_name ='payslips/employee_pay_slip_form.html'
+    context = {"form": form}
+    if request.POST:
+        initial_base={}
+        initial_base['year']=request.POST.get('year')
+        initial_base['month']=request.POST.get('month') 
+        form =PayslipForm(initial=initial_base)
+        year = request.POST.get('year')
+        month = request.POST.get('month')
+        period=period_dates(year,month)
+        if year and month:
+            queryset =Employee.objects.filter(Q(date_of_leaving__isnull=True)|Q(date_of_leaving__range=[period['from_date'],period['to_date']])|Q(date_of_leaving__gte=period['from_date']),date_of_joining__lte=period['to_date']).all().order_by('first_name')
+        else:
+                queryset =Employee.objects.none()
+        context = {"form": form}
+        earnings_array={}
+        deductions_array={}
+        extra_advances={}
+        per_page_array={}
+        final_array={}
+        data_count=0         
+        if queryset:
+            for employee in queryset:
+                data_count=data_count+1
+                for x in range(1,3):
+                    per_page_array.update({str(employee.employee_no)+''+str(x):get_pay_calculation(year=year,month=month,employee=employee)})
+                final_array.update({data_count:per_page_array})
+                per_page_array={}
+            context['year']=year
+            context['month']=datetime.date(1900, int(month), 1).strftime('%B')
+            context['data']=final_array       
+            context['type']=1               
+    return render(request, template_name, context)
+        
+        
+        
+        
 
 
 

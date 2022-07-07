@@ -20,7 +20,8 @@ def get_attendance_infor(year,month,employee):
     attendance_data=get_employee_attendance_details(employee.employee_no,year,month)
     attendance_data['employee_no']=attendance_data['employee_no']
     attendance_data['pin_no']=employee.pin_no
-    attendance_data['national_id']=employee.national_id 
+    attendance_data['nssf_no']=employee.nssf_no    
+    attendance_data['nhif_no']=employee.nhif_no 
     attendance_data['hours_in_month']=employee.work_hours_code.hours_in_month 
     return attendance_data
 
