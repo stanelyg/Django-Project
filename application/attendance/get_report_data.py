@@ -69,7 +69,8 @@ def get_employee_attendance_details(employee_no,year,month):
         rows['basic_salary']=row.basic_salary     
         rows['house_allowance_rate']=row.house_allowance_rate
         if data['attendance_details']:
-                rows['leaves']+=data['attendance_details'][str(year)+str(month)]["leaves"]
+                if data['attendance_details'][str(year)+str(month)]["leaves"] is not None:
+                    rows['leaves']+=Decimal(data['attendance_details'][str(year)+str(month)]["leaves"])
                 rows['worked_days'] +=Decimal(data['attendance_details'][str(year)+str(month)]["days"])
                 rows['absent_days'] =rows['working_days']- (Decimal(rows['leaves'])+ Decimal(rows['worked_days']))                            
                 if data['holiday']:

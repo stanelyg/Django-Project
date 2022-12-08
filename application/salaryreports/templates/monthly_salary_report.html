@@ -74,6 +74,7 @@
             <td class="text-left tr-btn"  colspan="6">
                 <input  class="btn btn-success btn-form hide-on-print"  type="submit" value="Submit" />
                 {% if object_list.table %}
+                <input  class="btn btn-info btn-form"  type="submit" onclick="exportCSV()" value="Export" />
                 <a href="{% url 'salaryreports:monthly-salary-report' %}"  class="btn btn-danger btn-form hide-on-print">Cancel</a>
 
             </td>
