@@ -71,8 +71,19 @@ def get_total_payment(pay_data,value_keys,total_array):
     return total_array
 
 def get_pay_calculation(year,month,employee):
-    net_infor =pay_formular(year,month,employee)    
-    return net_infor
+    close_salary=SavedSalary.objects.filter(year=year,month=month,employee_no=employee).values()
+    if close_salary:
+        full_array={}
+        attendance_data=get_attendance_infor(year, month, employee)
+        full_array=attendance_data
+        saved_instance=SavedSalary()
+        for key in list(saved_instance.__dict__):
+            if key !='_state' and key !='id':
+                full_array[key]=close_salary[0][key]
+        return full_array
+    else:
+        net_infor =pay_formular(year,month,employee)    
+        return net_infor
 
 def pay_formular(year,month,employee):    
     full_array={}
@@ -89,7 +100,8 @@ def pay_formular(year,month,employee):
     # full_array['hourly_rate']=round_half_up(attendance_data['basic_salary']/attendance_data['hours_in_month'],2)
     house_mount=get_housing_amount(employee_no,attendance_data['basic_salary'],attendance_data['house_allowance_rate'])
     full_array['housing_amount']=house_mount['housing_amount']  
-    full_array['gross_daily_rate']=round_half_up((attendance_data['basic_salary']+ Decimal(house_mount['housing_amount']))/attendance_data['working_days'],2)    
+    full_array['gross_daily_rate']=round_half_up((attendance_data['basic_salary']+ Decimal(house_mount['housing_amount']))/attendance_data['working_days'],2) 
+    full_array['absent_days']=attendance_data['absent_days']
     full_array['absent_amount']=get_absent_amount(full_array['gross_daily_rate'],attendance_data['absent_days'])
     full_array['tax_excemption']=0
     full_array['arrears_amount']=0
@@ -99,8 +111,6 @@ def pay_formular(year,month,employee):
     full_array['directors_fee']=0
     full_array['leave_encashed_days']=0
     full_array['leave_encashed_amount']=0
-
-    
     
     gross_salary_value=round_half_up(
                                     attendance_data['basic_salary']
@@ -205,6 +215,48 @@ def statutory_master(employee,year,month,gross_salary,taxable_array):
     return_array['paye_array']=paye_array
     return return_array
 
+class SavedSalary(models.Model):
+    year=models.CharField(max_length=6)
+    month=models.CharField(max_length=6)
+    employee_no=models.ForeignKey(Employee,on_delete=models.PROTECT)
+    basic_salary=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    gross_daily_rate=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    housing_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    absent_days=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    absent_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    notice_pay_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    worked_days=models.DecimalField(max_digits=6,decimal_places=2,blank=True,null=True,default=0)
+    worked_days_amount=models.DecimalField(max_digits=12,decimal_places=2,blank=True,null=True,default=0)
+    gross_salary=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    taxable_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    insurance_relief=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    tax_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    paye_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    relief_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    nssf_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    employee_contribution=models.DecimalField(max_digits=8,decimal_places=2,default=0,null=True)
+    nhif_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    total_deduction  =models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    net_salary=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    closed=models.BooleanField(default=True)
+    
+def save_salary(employee_data,year,month):
+        from dbmaster.models import period_dates
+        saving_dict={}
+        for employee in employee_data:
+            multi_data=get_pay_calculation(year,month,employee)
+            salary_instance=SavedSalary()
+            saving_dict['employee_no']=employee
+            for key in list(salary_instance.__dict__):
+                if key !='_state' and key !='id' and key in multi_data:
+                    saving_dict[key]=multi_data[key]
+            saving_dict['closed']=1
+            salary_instance=SavedSalary(**saving_dict)
+            check_closed=SavedSalary.objects.filter(year=year,month=month,employee_no=saving_dict['employee_no']).count()
+            if check_closed>0:
+                pass
+            else:
+                salary_instance.save()
 
  
 

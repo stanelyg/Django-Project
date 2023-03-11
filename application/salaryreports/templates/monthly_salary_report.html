@@ -25,6 +25,11 @@
         $("#tbody").find("tr").show();
         }
     }
+    $(function(){
+        $('#selectall').on('change', function(){
+        $('.selectemp').prop('checked',this.checked);
+        });
+    });
     </script>
      <style  TYPE="text/css" scoped>
 
@@ -74,6 +79,8 @@
             <td class="text-left tr-btn"  colspan="6">
                 <input  class="btn btn-success btn-form hide-on-print"  type="submit" value="Submit" />
                 {% if object_list.table %}
+                <button type="submit" class="btn btn-info btn-form hide-on-print" value="1" name="close" >Close</button>
+                <button type="submit" class="btn btn-info" value="1" style="padding: 3px 6px;" name="update" >Re-Calculate</button>
                 <input  class="btn btn-info btn-form"  type="submit" onclick="exportCSV()" value="Export" />
                 <a href="{% url 'salaryreports:monthly-salary-report' %}"  class="btn btn-danger btn-form hide-on-print">Cancel</a>
 
@@ -81,8 +88,6 @@
         </tr>
         {%endif%}
         </table>
-    </form>
-    
 </div>
 <div class="1500px;">
     {% if object_list.table %}
@@ -90,7 +95,10 @@
         <caption style="display:none;">Monthly Salary Report-{{object_list.form.year.value}}-{{object_list.form.month.value}} </caption>
         <thead class="info">
         <tr>
-            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Si</td>          
+            <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Si</td>   
+            <td class="hidewhensummary noExport hide-on-print" style="font-weight:bold; vertical-align:bottom;">Close</br>
+                <input class = "auth-ro-allow hide-on-print" id='selectall' type="checkbox" title= "Check the Red Highlights !!!!">
+              </td>       
             <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">Emp No</td>            
             <td style="font-weight:bold; vertical-align:bottom;">Name</td>
             <td class="hidewhensummary" style="font-weight:bold; vertical-align:bottom;">National ID</td>            
@@ -103,7 +111,9 @@
         <tbody id="tbody">
             {% for key,row in  object_list.table.items %}           
             <tr>
-                <td>{{forloop.counter}}</td>            
+                <td>{{forloop.counter}}</td>
+                <td class="text-center noExport hide-on-print" style="white-space: nowrap;">{% if row.closed %}closed {%else%} <input type="checkbox" class="selectemp" name="closing[{{forloop.counter}}]" title= "Check the Red Highlights !!!!"> {%endif%}</td>
+                <td class="text-left noExport" style="white-space: nowrap;display:none;"><input type="text"  name="employee_no[{{forloop.counter}}]" value="{{row.employee_no}}"></td>
                 <td class="text-left" style="white-space: nowrap">{{row.employee_no}}</td>
                 <td class="text-left" style="white-space: nowrap">{{row.employee_name}}</td>
                 <td class="text-left hidewhentotal" style="white-space: nowrap">{{row.national_id}}</td>
@@ -118,6 +128,6 @@
     {%endif%}
 
    
-
+</form>
 </div>
 {% endblock %}

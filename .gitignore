@@ -1,4 +1,5 @@
 .env
+.history
 # virtualenv #
 /.env/*
 /env/*
@@ -8,6 +9,8 @@
 /application/Attachments/*/*.png
 /application/Attachments/*/*.jpeg
 /application/Attachments/*/*.jpg
+
+
 
 
 
@@ -42,4 +45,5 @@ configs.json
 **/migrations/**
 !**/migrations
 !**/migrations/__init__.py
+
 

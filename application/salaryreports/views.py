@@ -12,7 +12,7 @@ from django.views.generic.list import ListView
 from employees.models import Employee
 from dbmaster.models import Company,round_half_up
 from salaryreports.forms import MonthlyReportForm,StatutoryReportForm,ItaxReportForm,PayslipForm
-from salaryreports.models import (get_pay_calculation,get_payment_report,get_statutory_report)
+from salaryreports.models import (get_pay_calculation,get_payment_report,get_statutory_report,save_salary,SavedSalary)
 
 
 class MonthlyReportView(LoginRequiredMixin,ListView):
@@ -25,8 +25,7 @@ class MonthlyReportView(LoginRequiredMixin,ListView):
             return initial_base
       def get_queryset(self):
             year = self.request.GET.get('year')
-            month = self.request.GET.get('month')
-                   
+            month = self.request.GET.get('month')                   
             if year and month:
                 period=period_dates(year,month) 
                 queryset =Employee.objects.filter(Q(date_of_leaving__isnull=True)|Q(date_of_leaving__range=[period['from_date'],period['to_date']])|Q(date_of_leaving__gte=period['from_date']),date_of_joining__lte=period['to_date']).all()
@@ -36,11 +35,28 @@ class MonthlyReportView(LoginRequiredMixin,ListView):
             data_array={}
             salary_data={}
             salary_data['form']=form
+            if self.request.GET.get('close'):
+                employees_to_close(get_post_array(self.request.GET.items(),dict),len(queryset),year,month)
+            if self.request.GET.get('update'):
+               recalculate_salary(queryset,year,month)
             if queryset:
                return_data=get_payment_report(queryset,year,month)
                salary_data['table']=return_data['rows']
                salary_data['return_data']=return_data['return_data']
             return salary_data
+def employees_to_close(post_array,no_of_employees,year,month):
+      employees=[]
+      for x in range(1,no_of_employees+1):
+               if 'closing['+str(x)+']' in  post_array:
+                  employees.append(post_array['employee_no['+str(x)+']'])
+      queryset = Employee.objects.select_related().filter(employee_no__in=employees).all()
+      save_salary(queryset,year,month)
+def recalculate_salary(queryset,year,month):
+    employees=[x  for x in queryset]
+    SavedSalary.objects.filter(employee_no__in=employees).delete()
+    save_salary(queryset,year,month)
+    
+      
 
 class StatutoryReportView(LoginRequiredMixin,ListView):
     form_class = StatutoryReportForm
