@@ -24,6 +24,7 @@ class Employee(models.Model):
       work_hours_code=models.ForeignKey(WorkingHour,on_delete=models.PROTECT)
       basic_salary=models.DecimalField(max_digits=12,decimal_places=2,blank=True,null=True)
       house_allowance_rate=models.DecimalField(max_digits=12,decimal_places=2,blank=True,null=True)
+      housing_levy_rate=models.DecimalField(max_digits=12,decimal_places=2,blank=True,null=True)
       pin_no=models.CharField(max_length=11,blank=True,null=True)
       nssf_no=models.CharField(max_length=11,blank=True,null=True)
       nhif_no=models.CharField(max_length=11,blank=True,null=True)

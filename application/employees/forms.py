@@ -56,6 +56,12 @@ class EmployeeCreateForm(forms.ModelForm):
                     'class':"form-control",                
                     'autocomplete':'off',
                 }))
+        housing_levy_rate=forms.DecimalField(
+                widget=forms.TextInput(attrs={                   
+                    'value':'',
+                    'class':"form-control",                
+                    'autocomplete':'off',
+                }))
         national_id=forms.CharField(widget=forms.TextInput(attrs={'autocomplete':'off',
                     'class':"form-control",
                     'placeholder':"Enter National ID",                                                                 
@@ -125,6 +131,12 @@ class EmployeeUpdateForm(forms.ModelForm):
             'autocomplete':'off',
         }))
     house_allowance_rate=forms.DecimalField(
+                widget=forms.TextInput(attrs={                   
+                    'value':'',
+                    'class':"form-control",                
+                    'autocomplete':'off',
+                }))
+    housing_levy_rate=forms.DecimalField(
                 widget=forms.TextInput(attrs={                   
                     'value':'',
                     'class':"form-control",                

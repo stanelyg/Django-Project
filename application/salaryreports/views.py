@@ -128,7 +128,7 @@ class ItaxReportView(LoginRequiredMixin,ListView):
         for key ,values in salary_data['permanent_salary_data'].items():
             total_paye_amount+=values['paye_amount']
             if key not in return_arry:
-                temp_other_all_amt =-Decimal(values['absent_amount']) + Decimal(values['arrears_amount']) + Decimal(values['notice_pay_amount']) - Decimal(values['notice_recovery_amount']) + Decimal(values['severance_amount']) + Decimal(values['directors_fee'])
+                temp_other_all_amt =-Decimal(values['absent_amount']) #+ Decimal(values['notice_pay_amount']) - Decimal(values['notice_recovery_amount']) + Decimal(values['severance_amount']) + Decimal(values['directors_fee'])
                 temp_gross_not_rounded = Decimal(values['basic_salary']) + Decimal(values['housing_amount']) + Decimal(temp_other_all_amt)
                 temp_rounding=Decimal(temp_gross_not_rounded) - Decimal(round_half_up(temp_gross_not_rounded,0))
                 return_arry[str(key)+'p']={
@@ -137,8 +137,8 @@ class ItaxReportView(LoginRequiredMixin,ListView):
                 'type_of_employee':'Primary Employee',
                 'basic_salary':values['basic_salary'],
                 'housing_amount':values['housing_amount'],
-                'directors_fee':values['directors_fee'],
-                'leave_encashed_amount':values['leave_encashed_amount'],
+                'directors_fee':0,#values['directors_fee'],
+                'leave_encashed_amount':0, #values['leave_encashed_amount'],
                 'over_time_allowance':0,
                 'other_allowance':0 + (temp_other_all_amt-temp_rounding),
                 'vehicle_benefit':0,

@@ -39,6 +39,7 @@ def get_payment_report(employee_data,year,month):
         'gross_salary':'Gross Salary',
         'taxable_amount':'Taxable Amount',
         'paye_amount':'Paye Amount',
+        'housing_levy_amount':'HSE Levy Amt',
         'insurance_relief':'Insurance Relief',
         'nssf_amount':'Nssf Amount',
         'nhif_amount':'Nhif Amount',
@@ -111,6 +112,8 @@ def pay_formular(year,month,employee):
     full_array['directors_fee']=0
     full_array['leave_encashed_days']=0
     full_array['leave_encashed_amount']=0
+    full_array['housing_levy_amount']=0   
+    
     
     gross_salary_value=round_half_up(
                                     attendance_data['basic_salary']
@@ -118,6 +121,8 @@ def pay_formular(year,month,employee):
                                     - Decimal(full_array['absent_amount']),0)
 
     full_array['gross_salary']=(gross_salary_value,0) [gross_salary_value<2]
+    full_array['housing_levy_amount']=get_housing_levy_amount(full_array['gross_salary'],attendance_data['housing_levy_rate'])['housing_levy_amount']
+
     taxable_array={ 
             'tax_excemption':Decimal(full_array['tax_excemption']),
     }
@@ -150,7 +155,8 @@ def pay_formular(year,month,employee):
     full_array['total_deduction']=round_half_up(
                             Decimal(full_array['paye_amount'])
                         + Decimal(full_array['nhif_amount'])
-                        + Decimal(full_array['nssf_amount'])                      
+                        + Decimal(full_array['nssf_amount'])
+                        + Decimal(full_array['housing_levy_amount'])                      
                         ,0)
     full_array['net_salary']=Decimal(full_array['gross_salary'])- Decimal(full_array['total_deduction'])
     return full_array
@@ -162,6 +168,13 @@ def get_housing_amount(employee_no,basic_salary,house_allowance_rate):
     return_array={}
     return_array['housing_amount']=0
     return_array['housing_amount']+=round_half_up(basic_salary*(house_allowance_rate/100),2)
+
+    return return_array
+
+def get_housing_levy_amount(gross_salary,housing_levy_rate):
+    return_array={}
+    return_array['housing_levy_amount']=0
+    return_array['housing_levy_amount']+=round_half_up(gross_salary*(housing_levy_rate/100),2)
 
     return return_array
 
@@ -221,7 +234,10 @@ class SavedSalary(models.Model):
     employee_no=models.ForeignKey(Employee,on_delete=models.PROTECT)
     basic_salary=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
     gross_daily_rate=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    house_allowance_rate=models.DecimalField(max_digits=12,decimal_places=2,blank=True,null=True)
+    housing_levy_rate=models.DecimalField(max_digits=12,decimal_places=2,default=0,blank=True,null=True)
     housing_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
+    housing_levy_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
     absent_days=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
     absent_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)
     notice_pay_amount=models.DecimalField(max_digits=12,decimal_places=2,default=0,null=True)

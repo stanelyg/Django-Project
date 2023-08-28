@@ -33,8 +33,10 @@ def get_form(request):
             emp_id=get_post_array(request.POST.items(), dict())['employee_no']
             return HttpResponseRedirect(reverse("employees:employee-details",kwargs={'pk':emp_id}))
 def navigate_form(request):
+      print(get_post_array(request.POST.items(),dict()))
       if request.POST:
             nav_btn_data=get_post_array(request.POST.items(),dict())
+          
             if nav_btn_data['nav-button']=='first':
                   query=Employee.objects.order_by('employee_no').first()
                   if query:

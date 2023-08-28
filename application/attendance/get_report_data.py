@@ -68,6 +68,7 @@ def get_employee_attendance_details(employee_no,year,month):
         rows['national_id']=row.national_id          
         rows['basic_salary']=row.basic_salary     
         rows['house_allowance_rate']=row.house_allowance_rate
+        rows['housing_levy_rate']=row.housing_levy_rate
         if data['attendance_details']:
                 if data['attendance_details'][str(year)+str(month)]["leaves"] is not None:
                     rows['leaves']+=Decimal(data['attendance_details'][str(year)+str(month)]["leaves"])
