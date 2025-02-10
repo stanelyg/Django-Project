@@ -1,12 +1,13 @@
 # Django-Project
 This a sample project to showcase my hands-on skills in Django
 # Install/Launch
-Create a virtual environment 
-    python -m venv venv
-Activate the environment 
-    venv\Scripts\activate --- For Windows 
-    source venv/bin/activate  -- On macOS & Linux (Bash)
-Install the dependencies
-    pip install -r requirements.txt
-move to application directory and run the project 
-  -- yourdirectory/application python manage.py runserver
+Create a virtual environment <br>
+    python -m venv venv<br>
+Activate the environment <br>
+    venv\Scripts\activate --- For Windows <br>
+    source venv/bin/activate  -- On macOS & Linux (Bash)<br>
+Install the dependencies<br>
+    pip install -r requirements.txt<br>
+
+move to application directory and run the project <br>
+  -- yourdirectory/application python manage.py migrate --To create 
